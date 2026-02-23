@@ -313,21 +313,19 @@ async function saveEdit(){
   const catatan   = document.getElementById("edit_catatan").value;
   const vendor    = document.getElementById("edit_vendor").value;
 
+  const formData = new FormData();
+  formData.append("action", "updateTicket");
+  formData.append("ticket_id", ticket_id);
+  formData.append("status", status);
+  formData.append("catatan", catatan);
+  formData.append("vendor", vendor);
+  formData.append("estimasi", "");
+
   try{
 
     const res = await fetch(API_URL, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        action: "updateTicket",
-        ticket_id: ticket_id,
-        status: status,
-        catatan: catatan,
-        vendor: vendor,
-        estimasi: ""
-      })
+      body: formData
     });
 
     const result = await res.json();
