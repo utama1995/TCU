@@ -57,20 +57,17 @@ return;
 
 }
 
-let statusClass="status-open";
+let statusText = found.status || "Waiting";
 
-let statusText="Waiting";
+let statusClass = "status-open";
 
-if(statusText=="On Progress")
-statusClass="status-progress";
+if(statusText === "On Progress")
+statusClass = "status-progress";
 
-if(statusText=="Done")
-statusClass="status-done";
+if(statusText === "Done")
+statusClass = "status-done";
 
-
-document.getElementById("hasil").innerHTML=
-
-`
+document.getElementById("hasil").innerHTML = `
 <div class="label">Ticket ID:</div>
 <div class="value">${found.id}</div>
 
@@ -84,7 +81,9 @@ document.getElementById("hasil").innerHTML=
 <div class="value">${found.aset}</div>
 
 <div class="label">Status:</div>
-<div class="value ${found.status}"></div>
+<div class="value ${statusClass}">
+${statusText}
+</div>
 
 <div class="label">Foto Kerusakan:</div>
 <img src="${found.foto}">
