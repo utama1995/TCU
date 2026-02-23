@@ -123,7 +123,7 @@ document.getElementById("hasil").innerHTML =
 `
 <span style="color:green;">
 Laporan berhasil dikirim<br>
-Ticket ID: <b>${data.ticket}</b>
+Ticket ID: <b>${data.ticket_id}</b>
 </span>
 `;
 
