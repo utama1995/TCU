@@ -213,7 +213,7 @@ Maintenance Asset Management System
 
 <script>
 
-const API_URL="https://script.google.com/macros/s/AKfycbyTRjA_RbhitxWljte8qHZ5IBaDMZms0ScPQ5eBOpnoEIO46fYwA8d5IEWiAc4k2G_aRQ/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbyTRjA_RbhitxWljte8qHZ5IBaDMZms0ScPQ5eBOpnoEIO46fYwA8d5IEWiAc4k2G_aRQ/exec";
 
 
 function logout(){
@@ -308,57 +308,42 @@ document.getElementById("editModal").style.display="none";
 
 async function saveEdit(){
 
-const ticket_id=document.getElementById("edit_ticket").value;
-const status=document.getElementById("edit_status").value;
-const catatan=document.getElementById("edit_catatan").value;
-const vendor=document.getElementById("edit_vendor").value;
+  const ticket_id = document.getElementById("edit_ticket").value;
+  const status    = document.getElementById("edit_status").value;
+  const catatan   = document.getElementById("edit_catatan").value;
+  const vendor    = document.getElementById("edit_vendor").value;
 
+  try{
 
-try{
+    const res = await fetch(API_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        action: "updateTicket",
+        ticket_id: ticket_id,
+        status: status,
+        catatan: catatan,
+        vendor: vendor,
+        estimasi: ""
+      })
+    });
 
-const res=await fetch(API_URL,{
+    const result = await res.json();
 
-method:"POST",
+    if(result.success){
+      alert("Berhasil update");
+      closeModal();
+      loadData();
+    }else{
+      alert("Update gagal");
+    }
 
-headers:{
-"Content-Type":"application/json"
-},
-
-body:JSON.stringify({
-
-action:"updateTicket",
-ticket_id:ticket_id,
-status:status,
-catatan:catatan,
-vendor:vendor,
-estimasi:""
-
-})
-
-});
-
-const result=await res.json();
-
-if(result.success){
-
-alert("Berhasil update");
-
-closeModal();
-
-loadData();
-
-}else{
-
-alert("Update gagal");
-
-}
-
-}catch(err){
-
-alert("Error koneksi");
-
-}
-
+  }catch(err){
+    console.error(err);
+    alert("Error koneksi");
+  }
 }
 
 
