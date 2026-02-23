@@ -88,6 +88,14 @@ margin-top:15px;
 </head>
 
 <body>
+<script>
+const token = localStorage.getItem("token");
+
+if(!token){
+  alert("Silakan login terlebih dahulu");
+  window.location.href="login.html";
+}
+</script>
 
 <div class="container">
 
