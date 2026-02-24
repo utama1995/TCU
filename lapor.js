@@ -71,14 +71,24 @@ const fotoURL =
 await uploadFoto(file);
 
 if(!fotoURL){
-
-document.getElementById("hasil").innerHTML =
-"Gagal upload foto";
-
+document.getElementById("hasil").innerHTML = "Gagal upload foto";
 return;
-
 }
 
+if(nama.length < 3){
+alert("Nama terlalu pendek");
+return;
+}
+
+if(deskripsi.length < 10){
+alert("Deskripsi minimal 10 karakter");
+return;
+}
+
+if(file.size > 2 * 1024 * 1024){
+alert("Ukuran foto maksimal 2MB");
+return;
+}
 
 const formData = new FormData();
 
