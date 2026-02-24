@@ -102,8 +102,6 @@ hasil.innerHTML = `
 <div class="label">Nama Aset:</div>
 <div class="value">${data.aset || "-"}</div>
 
-<div class="label">Kategori Aset:</div>
-<div class="value">${found.aset}</div>
 
 <div class="label">Status:</div>
 <div class="value ${statusClass}">
@@ -115,9 +113,6 @@ ${statusText}
 
 <div class="label">Estimasi Selesai:</div>
 <div class="value">${data.estimasi || "-"}</div>
-
-<div class="label">Foto Kerusakan:</div>
-<img src="${found.foto}">
 `;
 
 }catch(err){
