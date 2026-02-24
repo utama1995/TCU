@@ -2,17 +2,14 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Portal Maintenance Aset</title>
 
 <style>
 
-.banner{
-width:100%;
-margin-bottom:15px;
-border-radius:8px;
-}
-
-  
+/* =============================== */
+/* BODY */
+/* =============================== */
 body{
 margin:0;
 font-family: Arial, Helvetica, sans-serif;
@@ -21,35 +18,99 @@ min-height:100vh;
 display:flex;
 justify-content:center;
 align-items:center;
+padding:15px;
+box-sizing:border-box;
 }
 
+/* =============================== */
+/* CONTAINER */
+/* =============================== */
 .container{
 background:white;
-width:400px;
-border-radius:12px;
-box-shadow:0 10px 25px rgba(0,0,0,0.3);
-padding:30px;
+width:100%;
+max-width:420px;
+border-radius:14px;
+box-shadow:0 15px 30px rgba(0,0,0,0.3);
+padding:30px 25px;
 text-align:center;
+box-sizing:border-box;
 }
 
+/* =============================== */
+/* BANNER */
+/* =============================== */
+.banner{
+width:100%;
+margin-bottom:20px;
+border-radius:10px;
+}
+
+/* =============================== */
+/* TITLE */
+/* =============================== */
+h2{
+margin-top:0;
+margin-bottom:25px;
+font-size:20px;
+color:#333;
+}
+
+/* =============================== */
+/* BUTTON */
+/* =============================== */
 button{
 width:100%;
 padding:15px;
-margin-top:10px;
-background:#1976d2;
+margin-top:12px;
+background:#2c5364;
 color:white;
 border:none;
+border-radius:8px;
 cursor:pointer;
-font-size:16px;
+font-size:15px;
+font-weight:600;
+transition:0.3s;
 }
 
 button:hover{
-background:#0d47a1;
+background:#203a43;
+}
+
+/* =============================== */
+/* LOGOUT BUTTON */
+/* =============================== */
+.logout-btn{
+background:#e74c3c;
+margin-bottom:20px;
+}
+
+.logout-btn:hover{
+background:#c0392b;
+}
+
+/* =============================== */
+/* MOBILE OPTIMIZATION */
+/* =============================== */
+@media (max-width:480px){
+
+.container{
+padding:25px 20px;
+}
+
+h2{
+font-size:18px;
+}
+
+button{
+padding:16px;
+font-size:14px;
+}
+
 }
 
 </style>
-
 </head>
+
 <script>
 const token = localStorage.getItem("token");
 const role  = localStorage.getItem("role");
@@ -71,18 +132,7 @@ if(role === "admin"){
 
 <h2>PORTAL MAINTENANCE ASET</h2>
 
-<button onclick="logout()" style="
-background:#e74c3c;
-color:white;
-border:none;
-padding:10px 15px;
-cursor:pointer;
-border-radius:5px;
-margin-bottom:15px;
-">
-Logout
-</button>
-
+<button class="logout-btn" onclick="logout()">Logout</button>
 
 <a href="lapor.html">
 <button>LAPOR KERUSAKAN</button>
@@ -93,12 +143,14 @@ Logout
 </a>
 
 </div>
+
 <script>
 function logout(){
-  localStorage.removeItem("token");
-  localStorage.removeItem("role");
-  window.location.href="login.html";
+localStorage.removeItem("token");
+localStorage.removeItem("role");
+window.location.href="login.html";
 }
 </script>
+
 </body>
 </html>
