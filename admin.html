@@ -7,12 +7,14 @@
 
 <style>
 
+/* ================= BODY ================= */
 body{
 margin:0;
 font-family:Arial,Helvetica,sans-serif;
 background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
 }
 
+/* ================= CONTAINER ================= */
 .container{
 width:95%;
 max-width:1200px;
@@ -23,6 +25,7 @@ box-shadow:0 10px 25px rgba(0,0,0,0.3);
 overflow:hidden;
 }
 
+/* ================= HEADER ================= */
 .header{
 display:flex;
 justify-content:space-between;
@@ -41,41 +44,39 @@ border-radius:6px;
 cursor:pointer;
 }
 
+/* ================= CONTENT ================= */
 .content{
 padding:25px;
+overflow-x:auto;
 }
 
+/* ================= TABLE ================= */
 table{
 width:100%;
+min-width:900px;
 border-collapse:collapse;
+font-size:14px;
 }
 
 th{
 background:#2c5364;
 color:white;
 padding:12px;
-font-size:14px;
+text-align:left;
+white-space:nowrap;
 }
 
 td{
 padding:12px;
 border-bottom:1px solid #eee;
-font-size:14px;
+white-space:nowrap;
 }
 
 tr:hover{
 background:#f8f8f8;
 }
 
-button{
-padding:6px 12px;
-border:none;
-border-radius:6px;
-cursor:pointer;
-background:#2c5364;
-color:white;
-}
-
+/* ================= STATUS BADGE ================= */
 .status{
 padding:4px 10px;
 border-radius:20px;
@@ -88,6 +89,42 @@ font-weight:600;
 .process{background:#3498db;}
 .done{background:#27ae60;}
 
+/* ================= PRIORITY BADGE ================= */
+.priority-high{
+background:#e74c3c;
+color:white;
+padding:4px 10px;
+border-radius:20px;
+font-size:12px;
+}
+
+.priority-medium{
+background:#f39c12;
+color:white;
+padding:4px 10px;
+border-radius:20px;
+font-size:12px;
+}
+
+.priority-low{
+background:#95a5a6;
+color:white;
+padding:4px 10px;
+border-radius:20px;
+font-size:12px;
+}
+
+/* ================= BUTTON ================= */
+button{
+padding:6px 12px;
+border:none;
+border-radius:6px;
+cursor:pointer;
+background:#2c5364;
+color:white;
+}
+
+/* ================= FOOTER ================= */
 .footer{
 text-align:center;
 padding:15px;
@@ -95,10 +132,7 @@ font-size:12px;
 color:#777;
 }
 
-/* ========================= */
-/* MODAL */
-/* ========================= */
-
+/* ================= MODAL ================= */
 .modal{
 display:none;
 position:fixed;
@@ -107,7 +141,7 @@ top:0;
 width:100%;
 height:100%;
 background:rgba(0,0,0,0.55);
-backdrop-filter:blur(3px);
+display:flex;
 justify-content:center;
 align-items:center;
 z-index:1000;
@@ -120,19 +154,12 @@ max-width:480px;
 padding:25px;
 border-radius:14px;
 box-shadow:0 20px 40px rgba(0,0,0,0.35);
-animation:fadeIn 0.25s ease;
-}
-
-@keyframes fadeIn{
-from{transform:translateY(-10px);opacity:0;}
-to{transform:translateY(0);opacity:1;}
 }
 
 .modal-content h3{
 margin-top:0;
 margin-bottom:20px;
 font-size:20px;
-font-weight:600;
 color:#2c5364;
 text-align:center;
 }
@@ -155,15 +182,6 @@ border-radius:8px;
 border:1px solid #ccc;
 font-size:14px;
 box-sizing:border-box;
-transition:0.3s;
-}
-
-.modal-content input:focus,
-.modal-content textarea:focus,
-.modal-content select:focus{
-border-color:#2c5364;
-outline:none;
-box-shadow:0 0 6px rgba(44,83,100,0.4);
 }
 
 .modal-content button{
@@ -171,30 +189,11 @@ width:100%;
 padding:12px;
 margin-top:12px;
 border-radius:8px;
-font-size:14px;
 font-weight:600;
-border:none;
-cursor:pointer;
-transition:0.3s;
 }
 
-.save-btn{
-background:#27ae60;
-color:white;
-}
-
-.save-btn:hover{
-background:#219150;
-}
-
-.cancel-btn{
-background:#95a5a6;
-color:white;
-}
-
-.cancel-btn:hover{
-background:#7f8c8d;
-}
+.save-btn{background:#27ae60;}
+.cancel-btn{background:#95a5a6;}
 
 </style>
 </head>
@@ -220,22 +219,23 @@ window.location.href="login.html";
 
 <div class="content">
 
-<h3>Daftar Laporan</h3>
-
 <table id="tabel">
 <thead>
 <tr>
-<th>Ticket ID</th>
+<th>Ticket</th>
 <th>Pelapor</th>
 <th>Aset</th>
-<th>Deskripsi</th>
+<th>Prioritas</th>
 <th>Status</th>
+<th>Vendor</th>
+<th>PIC</th>
+<th>Update</th>
 <th>Action</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td colspan="6">Loading...</td>
+<td colspan="9">Loading...</td>
 </tr>
 </tbody>
 </table>
@@ -248,8 +248,8 @@ Maintenance Asset Management System
 
 </div>
 
-<!-- MODAL -->
-<div id="editModal" class="modal">
+<!-- ================= MODAL ================= -->
+<div id="editModal" class="modal" style="display:none;">
 <div class="modal-content">
 
 <h3>Edit Ticket</h3>
@@ -288,7 +288,7 @@ window.location.href="login.html";
 
 async function loadData(){
 const tbody=document.querySelector("#tabel tbody");
-tbody.innerHTML="<tr><td colspan='6'>Loading...</td></tr>";
+tbody.innerHTML="<tr><td colspan='9'>Loading...</td></tr>";
 
 try{
 const res=await fetch(API_URL+"?action=list");
@@ -296,30 +296,42 @@ const data=await res.json();
 tbody.innerHTML="";
 
 data.forEach(row=>{
+
 const ticketId=row.id||"-";
 const nama=row.nama||"-";
 const aset=row.aset||"-";
-const deskripsi=row.deskripsi||"-";
 const status=row.status||"Waiting";
+const vendor=row.vendor||"-";
+const prioritas=row.prioritas||"Low";
+const pic=row.pic||"-";
+const update=row.update||"-";
 
 let statusClass="waiting";
 if(status==="On Progress") statusClass="process";
 if(status==="Done") statusClass="done";
+
+let priorityClass="priority-low";
+if(prioritas==="High") priorityClass="priority-high";
+if(prioritas==="Medium") priorityClass="priority-medium";
 
 tbody.innerHTML+=`
 <tr>
 <td>${ticketId}</td>
 <td>${nama}</td>
 <td>${aset}</td>
-<td>${deskripsi}</td>
+<td><span class="${priorityClass}">${prioritas}</span></td>
 <td><span class="status ${statusClass}">${status}</span></td>
+<td>${vendor}</td>
+<td>${pic}</td>
+<td>${update}</td>
 <td><button onclick="openEditModal('${ticketId}','${status}')">Edit</button></td>
 </tr>
 `;
+
 });
 
-}catch(err){
-tbody.innerHTML="<tr><td colspan='6'>Gagal memuat data</td></tr>";
+}catch{
+tbody.innerHTML="<tr><td colspan='9'>Gagal memuat data</td></tr>";
 }
 }
 
@@ -336,6 +348,7 @@ document.getElementById("editModal").style.display="none";
 }
 
 async function saveEdit(){
+
 const ticket_id=document.getElementById("edit_ticket").value;
 const status=document.getElementById("edit_status").value;
 const catatan=document.getElementById("edit_catatan").value;
