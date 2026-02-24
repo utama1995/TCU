@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cek Status Maintenance</title>
-
 <style>
 
 body{
@@ -14,35 +13,35 @@ min-height:100vh;
 display:flex;
 justify-content:center;
 align-items:center;
+padding:15px;
+box-sizing:border-box;
 }
 
 .container{
 background:white;
-width:450px;
-padding:30px;
+width:100%;
+max-width:480px;
+padding:25px;
 border-radius:12px;
 box-shadow:0 10px 25px rgba(0,0,0,0.3);
+box-sizing:border-box;
 }
 
 h2{
 text-align:center;
 margin-top:0;
 color:#333;
+font-size:20px;
 }
 
 input{
-width:90%;
-padding:12px;
+width:100%;
+padding:14px;
 margin-top:10px;
-margin-bottom:15px;
-margin-left:auto;
-margin-right:auto;
-display:block;
 border-radius:6px;
 border:1px solid #ccc;
 font-size:14px;
 transition:0.3s;
-
 }
 
 input:focus{
@@ -53,8 +52,8 @@ box-shadow:0 0 5px rgba(44,83,100,0.5);
 
 button{
 width:100%;
-padding:12px;
-margin-top:10px;
+padding:14px;
+margin-top:12px;
 background:#2c5364;
 color:white;
 border:none;
@@ -73,6 +72,8 @@ margin-top:20px;
 padding:15px;
 background:#f9f9f9;
 border-radius:8px;
+font-size:14px;
+word-wrap:break-word;
 }
 
 .label{
@@ -110,8 +111,20 @@ display:block;
 margin-top:15px;
 }
 
-</style>
+@media (max-width:480px){
 
+.container{
+padding:20px;
+border-radius:10px;
+}
+
+h2{
+font-size:18px;
+}
+
+}
+
+</style>
 </head>
 
 <body>
