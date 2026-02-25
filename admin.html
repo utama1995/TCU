@@ -289,12 +289,14 @@ tbody.innerHTML="<tr><td colspan='7'>Gagal memuat data</td></tr>";
 function openEditModal(ticket,status){
 
 if(status==="Done"){
-alert("Ticket sudah selesai dan tidak dapat diedit.");
+alert("Ticket sudah selesai dan tidak dapat diedit kembali.");
 return;
 }
 
 document.getElementById("edit_ticket").value=ticket;
 document.getElementById("edit_status").value=status;
+document.getElementById("edit_catatan").value="";
+document.getElementById("edit_vendor").value="";
 document.getElementById("editModal").style.display="flex";
 }
 
