@@ -209,6 +209,7 @@ window.location.href="login.html";
 <tr>
 <th>Ticket</th>
 <th>Pelapor</th>
+<th>Cabang</th>
 <th>Aset</th>
 <th>Status</th>
 <th>Vendor</th>
@@ -217,7 +218,7 @@ window.location.href="login.html";
 </tr>
 </thead>
 <tbody>
-<tr><td colspan="7">Loading...</td></tr>
+<tr><td colspan="8">Loading...</td></tr>
 </tbody>
 </table>
 
@@ -306,6 +307,7 @@ tbody.innerHTML+=`
 <tr>
 <td>${row.id||"-"}</td>
 <td>${row.nama||"-"}</td>
+<td>${row.departemen||"-"}</td>
 <td>${row.aset||"-"}</td>
 <td><span class="status ${statusClass}">${status}</span></td>
 <td>${row.vendor||"-"}</td>
