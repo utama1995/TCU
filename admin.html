@@ -46,6 +46,16 @@ padding:25px;
 overflow-x:auto;
 }
 
+.filter-box{
+margin-bottom:15px;
+}
+
+.filter-box select{
+padding:8px;
+border-radius:6px;
+border:1px solid #ccc;
+}
+
 table{
 width:100%;
 min-width:900px;
@@ -96,7 +106,6 @@ background:#bdc3c7;
 cursor:not-allowed;
 }
 
-/* MODAL */
 .modal{
 display:none;
 position:fixed;
@@ -183,6 +192,18 @@ window.location.href="login.html";
 </div>
 
 <div class="content">
+
+<div class="filter-box">
+<label><strong>Filter Status:</strong></label>
+<select id="filterStatus" onchange="applyFilter()">
+<option value="All">All</option>
+<option value="Waiting">Waiting</option>
+<option value="Pending">Pending</option>
+<option value="On Progress">On Progress</option>
+<option value="Done">Done</option>
+</select>
+</div>
+
 <table id="tabel">
 <thead>
 <tr>
@@ -199,6 +220,7 @@ window.location.href="login.html";
 <tr><td colspan="7">Loading...</td></tr>
 </tbody>
 </table>
+
 </div>
 
 <div class="footer">
@@ -206,10 +228,8 @@ Maintenance Asset Management System
 </div>
 </div>
 
-<!-- MODAL -->
 <div id="editModal" class="modal">
 <div class="modal-content">
-
 <h3>Edit Ticket</h3>
 
 <label>Ticket ID</label>
@@ -229,9 +249,8 @@ Maintenance Asset Management System
 <label>Vendor</label>
 <input id="edit_vendor">
 
-<button class="save-btn" id="saveBtn" onclick="saveEdit()">Save</button>
+<button class="save-btn" onclick="saveEdit()">Save</button>
 <button class="cancel-btn" onclick="closeModal()">Cancel</button>
-
 </div>
 </div>
 
@@ -239,10 +258,21 @@ Maintenance Asset Management System
 
 const API_URL="https://script.google.com/macros/s/AKfycbxWLiPuxIFd6Hy0PKUtx-mbgm_o2bWCT7Mog9wk1TGIszu-v7r8RvKfZLDDUvtSvhIC6w/exec";
 
+let allTickets=[];
+
 function logout(){
 localStorage.removeItem("token");
 localStorage.removeItem("role");
 window.location.href="login.html";
+}
+
+function formatTanggalIndonesia(tanggalISO){
+if(!tanggalISO) return "-";
+const t=new Date(tanggalISO);
+if(isNaN(t)) return "-";
+return String(t.getDate()).padStart(2,'0')+"/"+
+String(t.getMonth()+1).padStart(2,'0')+"/"+
+t.getFullYear();
 }
 
 async function loadData(){
@@ -251,19 +281,26 @@ tbody.innerHTML="<tr><td colspan='7'>Loading...</td></tr>";
 
 try{
 const res=await fetch(API_URL+"?action=list");
-const data=await res.json();
+allTickets=await res.json();
+renderTable(allTickets);
+}catch{
+tbody.innerHTML="<tr><td colspan='7'>Gagal memuat data</td></tr>";
+}
+}
+
+function renderTable(data){
+const tbody=document.querySelector("#tabel tbody");
 tbody.innerHTML="";
 
 data.forEach(row=>{
 
 const status=row.status||"Waiting";
-
 let statusClass="waiting";
 if(status==="Pending") statusClass="pending";
 if(status==="On Progress") statusClass="process";
 if(status==="Done") statusClass="done";
 
-const disabled = status==="Done" ? "disabled" : "";
+const disabled=status==="Done"?"disabled":"";
 
 tbody.innerHTML+=`
 <tr>
@@ -275,25 +312,28 @@ tbody.innerHTML+=`
 <td>${formatTanggalIndonesia(row.update)}</td>
 <td>
 <button ${disabled} onclick="openEditModal('${row.id}','${status}')">
-${status==="Done" ? "Locked" : "Edit"}
+${status==="Done"?"Locked":"Edit"}
 </button>
 </td>
-</tr>
-`;
+</tr>`;
 });
-
-}catch{
-tbody.innerHTML="<tr><td colspan='7'>Gagal memuat data</td></tr>";
 }
+
+function applyFilter(){
+const selected=document.getElementById("filterStatus").value;
+if(selected==="All"){
+renderTable(allTickets);
+return;
+}
+const filtered=allTickets.filter(t=>t.status===selected);
+renderTable(filtered);
 }
 
 function openEditModal(ticket,status){
-
 if(status==="Done"){
 alert("Ticket sudah selesai dan tidak dapat diedit kembali.");
 return;
 }
-
 document.getElementById("edit_ticket").value=ticket;
 document.getElementById("edit_status").value=status;
 document.getElementById("editModal").style.display="flex";
@@ -304,7 +344,6 @@ document.getElementById("editModal").style.display="none";
 }
 
 async function saveEdit(){
-
 const ticket_id=document.getElementById("edit_ticket").value;
 const status=document.getElementById("edit_status").value;
 const catatan=document.getElementById("edit_catatan").value;
@@ -327,27 +366,7 @@ loadData();
 alert("Update gagal");
 }
 }
-function formatTanggalIndonesia(tanggalISO){
 
-if(!tanggalISO) return "-";
-
-try{
-
-const tanggal = new Date(tanggalISO);
-
-if(isNaN(tanggal)) return "-";
-
-const day = String(tanggal.getDate()).padStart(2,'0');
-const month = String(tanggal.getMonth()+1).padStart(2,'0');
-const year = tanggal.getFullYear();
-
-return `${day}/${month}/${year}`;
-
-}catch{
-return "-";
-}
-
-}
 loadData();
 
 </script>
