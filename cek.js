@@ -60,7 +60,7 @@ API_URL + "?action=get&ticket_id=" + encodeURIComponent(ticket)
 );
 
 const data = await response.json();
-
+console.log("DATA DARI BACKEND:", data);
 if(!data || data.success === false){
 
 hasil.innerHTML = "<span style='color:red;'>Ticket tidak ditemukan</span>";
