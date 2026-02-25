@@ -112,7 +112,13 @@ ${statusText}
 <div class="value">${data.catatan || "-"}</div>
 
 <div class="label">Vendor:</div>
-<div class="value">${data.vendor || "-"}</div>
+<div class="value">
+${
+data.vendor && data.vendor.trim() !== ""
+? data.vendor
+: "-"
+}
+</div>
 
 <div class="label">Estimasi Selesai:</div>
 <div class="value">${data.estimasi || "-"}</div>
