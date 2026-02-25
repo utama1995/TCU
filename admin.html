@@ -13,6 +13,26 @@ font-family:Arial,Helvetica,sans-serif;
 background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
 }
 
+.desc-box{
+position:relative;
+}
+
+.close-btn{
+position:absolute;
+top:12px;
+right:15px;
+font-size:22px;
+font-weight:bold;
+color:#e74c3c;
+cursor:pointer;
+transition:0.2s;
+}
+
+.close-btn:hover{
+color:#c0392b;
+transform:scale(1.1);
+}
+  
 .container{
 width:95%;
 max-width:1300px;
@@ -254,10 +274,13 @@ Maintenance Asset Management System
 
 <!-- MODAL DESKRIPSI -->
 <div id="descModal" class="modal">
-<div class="modal-content">
+<div class="modal-content desc-box">
+
+<span class="close-btn" onclick="closeDescModal()">&times;</span>
+
 <h3>Deskripsi Kerusakan</h3>
-<div id="descContent" style="margin-top:15px;line-height:1.6;"></div>
-<button class="cancel-btn" onclick="closeDescModal()">Tutup</button>
+<div id="descContent" style="margin-top:15px; line-height:1.6;"></div>
+
 </div>
 </div>
 
