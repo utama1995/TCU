@@ -154,7 +154,24 @@ font-size:18px;
 
 <input id="username" placeholder="Username">
 
-<input id="password" type="password" placeholder="Password">
+<div style="position:relative;">
+
+<input id="password" type="password" placeholder="Password" style="padding-right:45px;">
+
+<span onclick="togglePassword()" 
+        style="
+        position:absolute;
+        right:12px;
+        top:50%;
+        transform:translateY(-50%);
+        cursor:pointer;
+        font-size:18px;
+        user-select:none;
+        ">
+    👁️
+</span>
+
+</div>
 
 <button onclick="login()">Login</button>
 
@@ -214,7 +231,18 @@ document.getElementById("status").innerText="Koneksi gagal";
 }
 
 }
+function togglePassword(){
+  const input = document.getElementById("password");
+  const eye = event.target;
 
+  if(input.type === "password"){
+    input.type = "text";
+    eye.innerText = "🙈";
+  }else{
+    input.type = "password";
+    eye.innerText = "👁️";
+  }
+}
 </script>
 
 </body>
