@@ -1,144 +1,84 @@
 // ================================
-// FORMAT TANGGAL INDONESIA
+// CEK LAPORAN SAYA (GROUPING)
 // ================================
-function formatTanggalIndonesia(tanggalISO){
 
-if(!tanggalISO) return "-";
+document.addEventListener("DOMContentLoaded", async function(){
+
+const username = localStorage.getItem("username");
+const content = document.getElementById("content");
+
+if(!username){
+content.innerHTML="Session tidak valid";
+return;
+}
 
 try{
 
-const tanggal = new Date(tanggalISO);
+const res = await fetch(API_URL+"?action=list");
+const data = await res.json();
 
-if(isNaN(tanggal)) return tanggalISO;
-
-return tanggal.toLocaleDateString("id-ID", {
-day: "numeric",
-month: "long",
-year: "numeric"
-});
-
-}catch{
-
-return tanggalISO;
-
-}
-
-}
-
-
-// ================================
-// GLOBAL LOCK (ANTI DOUBLE CLICK)
-// ================================
-let isChecking = false;
-
-
-// ================================
-// CEK STATUS (PRODUCTION VERSION)
-// ================================
-async function cekStatus(){
-
-if(isChecking) return;
-isChecking = true;
-
-const hasil = document.getElementById("hasil");
-const ticket = document.getElementById("ticket").value.trim();
-
-if(!ticket){
-
-alert("Masukkan Ticket ID");
-isChecking = false;
+if(!Array.isArray(data)){
+content.innerHTML="Gagal memuat data";
 return;
-
 }
 
-hasil.innerHTML = "Mencari data...";
+const myTickets = data.filter(t => t.nama === username);
 
-try{
-
-const response = await fetch(
-API_URL + "?action=get&ticket_id=" + encodeURIComponent(ticket)
-);
-
-const data = await response.json();
-console.log("DATA DARI BACKEND:", data);
-if(!data || data.success === false){
-
-hasil.innerHTML = "<span style='color:red;'>Ticket tidak ditemukan</span>";
-isChecking = false;
+if(myTickets.length === 0){
+content.innerHTML="Anda belum memiliki laporan.";
 return;
-
 }
 
+renderSection("Waiting","waiting");
+renderSection("On Progress","process");
+renderSection("Pending","pending");
+renderSection("Done","done");
 
-// ================================
-// STATUS CLASS
-// ================================
-let statusText = data.status || "Waiting";
-let statusClass = "status-open";
+function renderSection(status,labelClass){
 
-if(statusText === "On Progress")
-statusClass = "status-progress";
+const group = myTickets.filter(t => t.status === status);
+if(group.length === 0) return;
 
-if(statusText === "Done")
-statusClass = "status-done";
-
-// ================================
-// RENDER DATA
-// ================================
-hasil.innerHTML = `
-<div class="label">Ticket ID:</div>
-<div class="value">${ticket}</div>
-
-<div class="label">Tanggal Lapor:</div>
-<div class="value">${formatTanggalIndonesia(data.tanggal)}</div>
-
-<div class="label">Nama Pelapor:</div>
-<div class="value">${data.nama || "-"}</div>
-
-<div class="label">Cabang:</div>
-<div class="value">${data.departemen || "-"}</div>
-
-<div class="label">Nama Aset:</div>
-<div class="value">${data.aset || "-"}</div>
-
-
-<div class="label">Status:</div>
-<div class="value ${statusClass}">
-${statusText}
-</div>
-
-<div class="label">Catatan GA:</div>
-<div class="value">${data.catatan || "-"}</div>
-
-<div class="label">Vendor:</div>
-<div class="value">
-${
-data.vendor && data.vendor.trim() !== ""
-? data.vendor
-: "-"
-}
-</div>
-
-<div class="label">Estimasi Selesai:</div>
-<div class="value">${data.estimasi || "-"}</div>
-
-<div class="label">Foto Pelaporan:</div>
-<div class="value">
-${
-data.foto
-? `<img src="${data.foto}" alt="Foto Laporan">`
-: "-"
-}
-</div>
+let html = `
+<div class="section">
+<h3 class="${labelClass}">${status}</h3>
 `;
 
-}catch(err){
+group.forEach(t=>{
+html += `
+<div class="card">
+<div class="ticket-id">${t.id}</div>
+<div><strong>Aset:</strong> ${t.aset || "-"}</div>
+<div><strong>Cabang:</strong> ${t.departemen || "-"}</div>
+<div><strong>Tanggal:</strong> ${formatTanggal(t.tanggal)}</div>
+</div>
+`;
+});
 
-hasil.innerHTML = "<span style='color:red;'>Error koneksi server</span>";
-console.error(err);
-
+html += `</div>`;
+content.innerHTML += html;
 }
 
-isChecking = false;
+}catch(err){
+console.error(err);
+content.innerHTML="Terjadi kesalahan memuat data.";
+}
+
+});
+
+
+// ================================
+// FORMAT TANGGAL
+// ================================
+function formatTanggal(date){
+
+if(!date) return "-";
+
+const d = new Date(date);
+if(isNaN(d)) return "-";
+
+return d.getDate().toString().padStart(2,'0')+"/"+
+(d.getMonth()+1).toString().padStart(2,'0')+"/"+
+d.getFullYear();
 
 }
