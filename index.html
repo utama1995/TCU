@@ -118,10 +118,6 @@ document.addEventListener("DOMContentLoaded",function(){
 const username = localStorage.getItem("username");
 const role = localStorage.getItem("role");
 
-if(username){
-document.getElementById("userInfo").innerHTML=
-"<strong>Selamat datang, "+username+"</strong><br>Role: "+role;
-}
 
 if(role === "admin"){
 document.getElementById("adminSection").style.display="block";
@@ -132,3 +128,4 @@ document.getElementById("adminSection").style.display="block";
 
 </body>
 </html>
+
