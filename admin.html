@@ -296,8 +296,7 @@ const API_URL="https://script.google.com/macros/s/AKfycbxWB6oZ2jIyyVQjUjUx76BaCq
 let allTickets=[];
 
 function logout(){
-localStorage.removeItem("token");
-localStorage.removeItem("role");
+localStorage.clear();
 window.location.href="login.html";
 }
 
