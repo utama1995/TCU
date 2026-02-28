@@ -126,11 +126,6 @@ if(role === "admin"){
   window.location.href="admin.html";
 }
 
-// Proteksi password default
-const userPassword = localStorage.getItem("userPassword");
-if(userPassword === "password123"){
-  window.location.href="ubah-password.html";
-}
 
 </script>
 
@@ -235,6 +230,7 @@ fetch(API_URL + "?action=list")
   
 </body>
 </html>
+
 
 
 
