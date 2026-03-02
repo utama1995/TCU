@@ -3,6 +3,29 @@
 // ========================================
 let isProcessing = false;
 
+document.addEventListener("DOMContentLoaded", async function(){
+
+  const username = localStorage.getItem("username");
+
+  if(!username) return;
+
+  try{
+
+    const res = await fetch(
+      API_URL + "?action=getUser&username=" + encodeURIComponent(username)
+    );
+
+    const data = await res.json();
+
+    if(data.success){
+      document.getElementById("nama").value = data.nama;
+    }
+
+  }catch(err){
+    console.error(err);
+  }
+
+});
 
 // ========================================
 // SANITASI INPUT
