@@ -190,83 +190,59 @@ Maintenance Asset Management System
 <script>
 
 const API_URL =
-"https://script.google.com/macros/s/AKfycbwRszf7pnwQG684yrPzhwe1cSLUTqZ43BaWciMkQBYP0NPgBDRsM5Wy-4FS9UQKgLGlSQ/exec";
+"https://script.google.com/macros/s/AKfycbxWB6oZ2jIyyVQjUjUx76BaCqnwgrMIfaz33pEpCmls4gmYwrpLq7LNQ5oP1zN254YqAg/exec";
 
 async function login(){
 
-  const username = document.getElementById("username").value.trim();
-  const password = document.getElementById("password").value.trim();
+document.getElementById("status").innerText="Memproses login...";
 
-  if(!username || !password){
-    document.getElementById("errorMsg").style.display="block";
-    return;
-  }
+const username=document.getElementById("username").value;
+const password=document.getElementById("password").value;
 
-  const formData = new URLSearchParams();
-  formData.append("action","login");
-  formData.append("username",username);
-  formData.append("password",password);
-
-  try{
-
-    const res = await fetch(API_URL,{
-      method:"POST",
-      body:formData
-    });
-
-    const data = await res.json();
-
-    console.log("LOGIN RESPONSE:",data);
-
-    if(data.success){
-
-      localStorage.setItem("token",data.token);
-      localStorage.setItem("role",data.role);
-      localStorage.setItem("username",data.username);
-      localStorage.setItem("nama",data.nama);
-
-      window.location.href="index.html";
-
-    }else{
-      document.getElementById("errorMsg").style.display="block";
-    }
-
-  }catch(err){
-    console.error(err);
-  }
-}
+const formData=new FormData();
+formData.append("action","login");
+formData.append("username",username);
+formData.append("password",password);
 
 try{
 
 const res = await fetch(API_URL,{
-method:"POST",
-body:formData
+  method:"POST",
+  headers:{
+    "Content-Type":"application/x-www-form-urlencoded"
+  },
+  body:
+    "action=login" +
+    "&username=" + encodeURIComponent(username) +
+    "&password=" + encodeURIComponent(password)
 });
-
-const data = await res.json();
 
 if(data.success){
 
-  localStorage.setItem("token",data.token);
-  localStorage.setItem("role",data.role);
-  localStorage.setItem("username",data.username);
-  localStorage.setItem("nama",data.nama);
+localStorage.setItem("token",data.token);
+localStorage.setItem("role",data.role);
+localStorage.setItem("username",username); // TAMBAHKAN INI
+localStorage.setItem("userPassword",password);
 
-  window.location.href="index.html";
+document.getElementById("status").innerText="Login berhasil";
+
+setTimeout(()=>{
+if(data.role==="admin"){
+window.location.href="admin.html";
+}else{
+window.location.href="index.html";
+}
+},500);
 
 }else{
-  document.getElementById("errorMsg").style.display="block";
+document.getElementById("status").innerText="Username atau password salah";
 }
 
-}catch(error){
-
-console.error(error);
+}catch{
 document.getElementById("status").innerText="Koneksi gagal";
-
 }
 
 }
-
 function togglePassword(){
   const input = document.getElementById("password");
   const eye = event.target;
