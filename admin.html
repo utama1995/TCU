@@ -337,9 +337,24 @@ d.getFullYear();
 }
 
 async function loadData(){
-const res=await fetch(API_URL+"?action=list");
-allTickets=await res.json();
-renderTable(allTickets);
+
+  const token = localStorage.getItem("token");
+
+  const res = await fetch(
+    API_URL + "?action=list&token=" + encodeURIComponent(token)
+  );
+
+  const data = await res.json();
+
+  if(!data || data.success === false){
+    alert("Session habis. Silakan login ulang.");
+    localStorage.clear();
+    window.location.href="login.html";
+    return;
+  }
+
+  allTickets = data;
+  renderTable(allTickets);
 }
 
 function renderTable(data){
