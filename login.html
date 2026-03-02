@@ -190,59 +190,62 @@ Maintenance Asset Management System
 <script>
 
 const API_URL =
-"https://script.google.com/macros/s/AKfycbxvoiL0kwQmw-w9-3YMIfJxAAK6hSt1RBCOEAHIPkOqkiHrWAEyrUhe8rph6cXvTDa9JQ/exec";
+"https://script.google.com/macros/s/AKfycbxWB6oZ2jIyyVQjUjUx76BaCqnwgrMIfaz33pEpCmls4gmYwrpLq7LNQ5oP1zN254YqAg/exec";
 
 async function login(){
 
 document.getElementById("status").innerText="Memproses login...";
 
-const username=document.getElementById("username").value;
-const password=document.getElementById("password").value;
+const username=document.getElementById("username").value.trim();
+const password=document.getElementById("password").value.trim();
 
-const formData=new FormData();
-formData.append("action","login");
-formData.append("username",username);
-formData.append("password",password);
+if(!username || !password){
+document.getElementById("status").innerText="Username dan password wajib diisi";
+return;
+}
 
 try{
 
 const res = await fetch(API_URL,{
-  method:"POST",
-  headers:{
-    "Content-Type":"application/x-www-form-urlencoded"
-  },
-  body:
-    "action=login" +
-    "&username=" + encodeURIComponent(username) +
-    "&password=" + encodeURIComponent(password)
+method:"POST",
+headers:{
+"Content-Type":"application/x-www-form-urlencoded"
+},
+body:
+"action=login" +
+"&username=" + encodeURIComponent(username) +
+"&password=" + encodeURIComponent(password)
 });
+
+const data = await res.json();
 
 if(data.success){
 
 localStorage.setItem("token",data.token);
 localStorage.setItem("role",data.role);
-localStorage.setItem("username",username); // TAMBAHKAN INI
-localStorage.setItem("userPassword",password);
+localStorage.setItem("username",username);
 
 document.getElementById("status").innerText="Login berhasil";
 
 setTimeout(()=>{
-if(data.role==="admin"){
-window.location.href="admin.html";
-}else{
-window.location.href="index.html";
-}
+window.location.href="index.html";   // 🔥 SEMUA ROLE KE INDEX
 },500);
 
 }else{
+
 document.getElementById("status").innerText="Username atau password salah";
+
 }
 
-}catch{
+}catch(error){
+
+console.error(error);
 document.getElementById("status").innerText="Koneksi gagal";
+
 }
 
 }
+
 function togglePassword(){
   const input = document.getElementById("password");
   const eye = event.target;
