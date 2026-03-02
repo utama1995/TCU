@@ -197,17 +197,44 @@ color:#777;
 const token = localStorage.getItem("token");
 const role = localStorage.getItem("role");
 
-if(!token || role !== "admin"){
-alert("Akses ditolak");
-window.location.href="login.html";
+if(!token){
+  window.location.href="login.html";
+}
+
+if(role !== "admin"){
+  alert("Akses ditolak");
+  window.location.href="index.html";
 }
 </script>
 
 <div class="container">
 
 <div class="header">
-<h2>Admin Panel - Maintenance Aset</h2>
+
+<div style="display:flex;align-items:center;gap:15px;">
+
+<button onclick="goBack()" 
+style="
+background:transparent;
+border:none;
+color:white;
+font-size:22px;
+cursor:pointer;
+padding:0;
+transition:0.2s;
+"
+onmouseover="this.style.opacity='0.7'"
+onmouseout="this.style.opacity='1'"
+>
+◀
+</button>
+
+<h2 style="margin:0;">Admin Panel - Maintenance Aset</h2>
+
+</div>
+
 <button class="logout-btn" onclick="logout()">Logout</button>
+
 </div>
 
 <div class="content">
@@ -287,13 +314,16 @@ Maintenance Asset Management System
 
 <script>
 
-const API_URL="https://script.google.com/macros/s/AKfycbxvoiL0kwQmw-w9-3YMIfJxAAK6hSt1RBCOEAHIPkOqkiHrWAEyrUhe8rph6cXvTDa9JQ/exec";
+const API_URL="https://script.google.com/macros/s/AKfycbxWB6oZ2jIyyVQjUjUx76BaCqnwgrMIfaz33pEpCmls4gmYwrpLq7LNQ5oP1zN254YqAg/exec";
 
 let allTickets=[];
 
+function goBack(){
+window.location.href="index.html";
+}
+  
 function logout(){
-localStorage.removeItem("token");
-localStorage.removeItem("role");
+localStorage.clear();
 window.location.href="login.html";
 }
 
