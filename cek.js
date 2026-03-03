@@ -55,10 +55,18 @@ hasil.innerHTML = "Mencari data...";
 try{
 
 const response = await fetch(
-API_URL + "?action=get&ticket_id=" + encodeURIComponent(ticket)
+API_URL +
+"?action=get&ticket_id=" + encodeURIComponent(ticket) +
+"&token=" + encodeURIComponent(localStorage.getItem("token"))
 );
 
 const data = await response.json();
+  if(data.session_expired){
+  alert("Session berakhir. Silakan login ulang.");
+  localStorage.clear();
+  window.location.href = "login.html";
+  return;
+}
 console.log("DATA DARI BACKEND:", data);
 if(!data || data.success === false){
 
