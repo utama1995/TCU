@@ -366,6 +366,12 @@ async function loadData(){
   );
 
   const data = await res.json();
+  if(data.session_expired){
+  alert("Session berakhir. Silakan login ulang.");
+  localStorage.clear();
+  window.location.href = "login.html";
+  return;
+}
 
   if(!data || data.success === false){
     alert("Session habis. Silakan login ulang.");
