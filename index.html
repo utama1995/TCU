@@ -108,6 +108,22 @@ if(!token){
 </div>
 
 <script>
+const username = localStorage.getItem("username");
+
+fetch(API_URL + "?action=getUser&username=" + username)
+.then(res => res.json())
+.then(data => {
+
+if(data.lastlogin === ""){
+    
+alert("Silakan ubah password terlebih dahulu.");
+
+window.location.href = "reset-first-password.html";
+
+}
+
+});
+
 function logout(){
 localStorage.clear();
 window.location.href="login.html";
@@ -127,4 +143,5 @@ document.getElementById("adminSection").style.display="block";
 
 </body>
 </html>
+
 
