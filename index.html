@@ -71,10 +71,24 @@ background:#e74c3c;
 <script>
 const token = localStorage.getItem("token");
 const role = localStorage.getItem("role");
+const username = localStorage.getItem("username");
 
 if(!token){
   window.location.href="login.html";
 }
+
+// 2. Tampilkan Menu Admin HANYA jika role-nya adalah 'admin'
+  // Pastikan ID 'adminSection' ada di elemen HTML Anda
+  if(role === "admin"){
+    document.getElementById("adminSection").style.display = "block";
+  } else {
+    document.getElementById("adminSection").style.display = "none";
+  }
+
+  // Tampilkan info user (opsional)
+  if(document.getElementById("userInfo")){
+    do
+  
 </script>
 
 <div class="container">
@@ -143,5 +157,6 @@ document.getElementById("adminSection").style.display="block";
 
 </body>
 </html>
+
 
 
