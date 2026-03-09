@@ -210,10 +210,12 @@ if(!token){
   window.location.href="login.html";
 }
 
-if(role !== "admin"){
-  alert("Akses ditolak");
-  window.location.href="index.html";
-}
+if (role === "admin") {
+    const adminBox = document.getElementById("adminSection");
+    if (adminBox) {
+      adminBox.style.display = "block"; 
+    }
+  }
 </script>
 
 <div class="container">
