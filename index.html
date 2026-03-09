@@ -3,77 +3,81 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lapor Bolo</title>
+<title>Lapor Bolo - Home</title>
 <link rel="icon" type="image/png" href="icon.png">
 
 <style>
-body{
-margin:0;
-font-family:Arial,Helvetica,sans-serif;
-background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
-min-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
-padding:15px;
-}
+    body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 15px;
+    }
 
-.container{
-background:white;
-width:100%;
-max-width:420px;
-border-radius:14px;
-box-shadow:0 15px 30px rgba(0,0,0,0.3);
-padding:30px 25px;
-text-align:center;
-}
+    .container {
+        background: white;
+        width: 100%;
+        max-width: 420px;
+        border-radius: 14px;
+        box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+        padding: 30px 25px;
+        text-align: center;
+    }
 
-.banner{
-width:100%;
-margin-bottom:20px;
-border-radius:10px;
-}
+    .banner {
+        width: 100%;
+        margin-bottom: 20px;
+        border-radius: 10px;
+    }
 
-h2{
-margin-top:0;
-margin-bottom:25px;
-font-size:20px;
-}
+    h2 { margin: 0 0 25px 0; font-size: 20px; color: #333; }
 
-button{
-width:100%;
-padding:15px;
-margin-top:12px;
-background:#2c5364;
-color:white;
-border:none;
-border-radius:8px;
-cursor:pointer;
-font-weight:600;
-}
+    #userInfo {
+        margin-bottom: 20px;
+        padding: 12px;
+        background: #f1f4f6;
+        border-radius: 8px;
+        font-size: 15px;
+        color: #2c3e50;
+        font-weight: bold;
+        border-left: 5px solid #2c5364;
+    }
 
-button:hover{
-background:#203a43;
-}
+    button {
+        width: 100%;
+        padding: 15px;
+        margin-top: 12px;
+        background: #2c5364;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: 0.3s;
+    }
 
-.admin-btn{
-background:#8e44ad;
-}
+    button:hover { background: #203a43; transform: translateY(-2px); }
 
-.logout-btn{
-background:#e74c3c;
-}
+    .admin-btn { background: #8e44ad; }
+    .admin-btn:hover { background: #7d3c98; }
+
+    .logout-btn { background: #e74c3c; margin-top: 25px; }
+    .logout-btn:hover { background: #c0392b; }
 </style>
 </head>
 
 <body>
 
-  <div class="container">
+<div class="container">
     <img src="Banner Utama.png" class="banner" alt="Banner">
 
     <h2>LAPOR BOLO</h2>
 
-    <div id="userInfo">Memuat data user...</div>
+    <div id="userInfo">Memuat nama...</div>
 
     <a href="lapor.html"><button>LAPOR KERUSAKAN</button></a>
     <a href="cek.html"><button>CEK STATUS</button></a>
@@ -89,32 +93,37 @@ background:#e74c3c;
     <button class="logout-btn" onclick="logout()">LOGOUT</button>
 </div>
 
+<script src="config.js"></script>
 <script>
-    // 1. Validasi Token & Ambil Data
+    // 1. Ambil data dari Storage
     const token = localStorage.getItem("token");
     const role = localStorage.getItem("role");
-    const username = localStorage.getItem("username");
+    const fullUsername = localStorage.getItem("username") || "";
 
-    // Jika tidak ada token, tendang ke login
+    // Proteksi: Jika tidak login, balikkan ke login.html
     if (!token) {
         window.location.href = "login.html";
     }
 
-    // 2. Jalankan Fungsi setelah halaman dimuat
+    // 2. Bersihkan Nama (Ambil depan @ dan jadikan huruf besar)
+    const displayName = fullUsername.split('@')[0].toUpperCase();
+
+    // Jalankan manipulasi tampilan setelah halaman siap
     document.addEventListener("DOMContentLoaded", function() {
-        // Update Info User
+        // Tampilkan Nama yang sudah bersih
         const userInfoEl = document.getElementById("userInfo");
-        if (username) {
-            userInfoEl.innerHTML = `Selamat datang <b>${username}</b>`;
+        if (userInfoEl) {
+            userInfoEl.innerHTML = `Selamat Datang, ${displayName} 👋`;
         }
 
-        // Cek Role Admin
+        // Munculkan tombol admin hanya jika role === admin
         if (role === "admin") {
-            document.getElementById("adminSection").style.display = "block";
+            const adminBox = document.getElementById("adminSection");
+            if (adminBox) adminBox.style.display = "block";
         }
     });
 
-    // 3. Fungsi Logout (Global Scope agar bisa dipanggil onclick)
+    // 3. Fungsi Logout (Global agar bisa dipanggil onclick)
     function logout() {
         if (confirm("Apakah Anda yakin ingin keluar?")) {
             localStorage.clear();
@@ -122,7 +131,6 @@ background:#e74c3c;
         }
     }
 </script>
-  
+
 </body>
 </html>
-
