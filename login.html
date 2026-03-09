@@ -228,23 +228,18 @@ localStorage.setItem("username",username);
 document.getElementById("status").innerText="Login berhasil";
 
 setTimeout(()=>{
+        
 if(data.first_login){
-
-alert("Ini adalah login pertama Anda.\nPassword awal adalah: password123\nSilakan ubah password Anda.");
-
+alert("Ini adalah login pertama Anda.\nPassword awal adalah: utama123\nSilakan ubah password Anda.");
 window.location.href="reset-first-password.html";
-
 }else{
-
 window.location.href="index.html";
-
 }
+        
 },500);
 
 }else{
-
 document.getElementById("status").innerText="Username atau password salah";
-
 }
 
 }catch(error){
