@@ -162,6 +162,20 @@ if(!token){
   alert("Silakan login terlebih dahulu");
   window.location.href="login.html";
 }
+
+// Tambahkan logika ini di dalam tag <script> lapor.html
+    document.addEventListener("DOMContentLoaded", function() {
+        const fullUsername = localStorage.getItem("username") || "";
+        
+        // Mengambil nama depan sebelum @ dan mengubah ke HURUF BESAR (sama seperti di index)
+        const displayName = fullUsername.split('@')[0].toUpperCase();
+        
+        const namaInput = document.getElementById("nama");
+        if (namaInput && displayName) {
+            namaInput.value = displayName;
+        }
+    });
+  
 </script>
   
 <div class="container">
@@ -170,9 +184,9 @@ if(!token){
 
 <form id="formLapor">
 <label style="margin-top:10px; display:block;">Nama Pelapor</label>
-<input type="text" id="nama" placeholder="Nama Lengkap">
-<label style="margin-top:10px; display:block;">Cabang</label>
-<input type="text" id="cabang" placeholder="Cabang Kerja">
+    <input type="text" id="nama" placeholder="Memuat nama..." readonly style="background-color: #f0f0f0; cursor: not-allowed;">
+    <label style="margin-top:10px; display:block;">Cabang</label>
+    <input type="text" id="cabang" placeholder="Cabang Kerja">
 <label style="margin-top:10px; display:block;">Nama Aset</label>
 <input type="text" id="aset" placeholder="Nama benda yang dilaporkan">
 
@@ -243,5 +257,6 @@ border-radius:5px;
 
 </body>
 </html>
+
 
 
