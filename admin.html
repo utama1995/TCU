@@ -322,6 +322,10 @@ Maintenance Asset Management System
 <label>Vendor</label>
 <input id="edit_vendor">
 
+<label>Attachment File</label>
+<input type="file" id="edit_file" 
+accept=".jpg,.jpeg,.png,.pdf,.doc,.docx">
+
 <button class="save-btn" onclick="saveEdit()">Save</button>
 </div>
 </div>
@@ -399,6 +403,24 @@ async function loadData(){
 
   allTickets = data;
   renderTable(allTickets);
+}
+
+async function uploadFileToCloudinary(file){
+
+  const url = "https://api.cloudinary.com/v1_1/db00zaan0/upload";
+
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", "maintenance_upload");
+
+  const res = await fetch(url, {
+    method: "POST",
+    body: formData
+  });
+
+  const data = await res.json();
+
+  return data.secure_url; // URL file
 }
 
 function renderTable(data){
@@ -520,7 +542,15 @@ async function saveEdit(){
   formData.append("status",document.getElementById("edit_status").value);
   formData.append("catatan",document.getElementById("edit_catatan").value);
   formData.append("vendor",document.getElementById("edit_vendor").value);
+  formData.append("file", fileURL);
 
+const fileInput = document.getElementById("edit_file");
+let fileURL = "";
+
+if(fileInput.files.length > 0){
+  fileURL = await uploadFileToCloudinary(fileInput.files[0]);
+}
+  
   const res=await fetch(API_URL,{method:"POST",body:formData});
   const result=await res.json();
   if(result.session_expired){
