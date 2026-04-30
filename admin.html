@@ -269,6 +269,7 @@ onmouseout="this.style.opacity='1'"
 <th>Cabang</th>
 <th>Aset</th>
 <th>Deskripsi</th>
+<th>Foto</th>
 <th>Status</th>
 <th>Vendor</th>
 <th>Update</th>
@@ -332,6 +333,20 @@ Maintenance Asset Management System
 <h3>Deskripsi Kerusakan</h3>
 <div id="descContent" style="margin-top:15px; line-height:1.2;"></div>
 </div>
+</div>
+
+<!-- MODAL FOTO -->
+<div id="fotoModal" class="modal" onclick="overlayClose(event,'fotoModal')">
+  <div class="modal-content">
+    <span class="close-btn" onclick="closeModal('fotoModal')">&times;</span>
+    <h3>Foto Laporan</h3>
+
+    <div style="text-align:center;">
+      <img id="fotoContent" 
+           style="max-width:100%; border-radius:10px; margin-top:15px;">
+    </div>
+
+  </div>
 </div>
 
 <script>
@@ -415,6 +430,7 @@ function renderTable(data){
     <td>${row.departemen||"-"}</td>
     <td>${row.aset||"-"}</td>
     <td><button onclick="showDescription('${encodeURIComponent(row.deskripsi||"")}')">Lihat</button></td>
+    <td>${ row.foto ? `<button onclick="showFoto('${row.foto}')">Lihat</button>`: "-" }</td>
     <td><span class="status ${statusClass}">${status}</span></td>
     <td>${row.vendor||"-"}</td>
     <td>${formatTanggalIndonesia(row.update)}</td>
@@ -465,7 +481,16 @@ function showDescription(desc){
   decodeURIComponent(desc)||"Tidak ada deskripsi.";
   document.getElementById("descModal").style.display="flex";
 }
-
+  
+function showFoto(url){
+  if(!url){
+    alert("Foto tidak tersedia");
+    return;
+  }
+  document.getElementById("fotoContent").src = url;
+  document.getElementById("fotoModal").style.display = "flex";
+}
+  
 function openEditModal(ticket,status){
   if(status==="Done"){
     alert("Ticket sudah selesai dan tidak dapat diedit kembali.");
