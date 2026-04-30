@@ -90,6 +90,39 @@ if(statusText === "Done")
 statusClass = "status-done";
 
 // ================================
+// ATTACHMENT FILE
+// ================================
+let fileHTML = "";
+
+if(data.file && data.file.trim() !== ""){
+
+  // Jika file gambar
+  if(data.file.match(/\.(jpg|jpeg|png)$/i)){
+    fileHTML = `
+    <div class="label">Attachment File:</div>
+    <div class="value">
+      <img src="${data.file}" alt="Attachment">
+    </div>
+    `;
+  }
+
+  // Jika PDF / DOC
+  else{
+    fileHTML = `
+    <div class="label">Attachment File:</div>
+    <div class="value">
+      <a href="${data.file}" target="_blank"
+         style="display:inline-block;padding:10px;
+         background:#2c5364;color:white;border-radius:6px;">
+         📎 Lihat / Download File
+      </a>
+    </div>
+    `;
+  }
+
+}
+  
+// ================================
 // RENDER DATA
 // ================================
 hasil.innerHTML = `
@@ -129,6 +162,8 @@ data.vendor && data.vendor.trim() !== ""
 <div class="label">Estimasi Selesai:</div>
 <div class="value">${data.estimasi || "-"}</div>
 
+${fileHTML}
+
 <div class="label">Foto Pelaporan:</div>
 <div class="value">
 ${
@@ -138,7 +173,7 @@ data.foto
 }
 </div>
 `;
-
+  
 }catch(err){
 
 hasil.innerHTML = "<span style='color:red;'>Error koneksi server</span>";
