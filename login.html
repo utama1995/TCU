@@ -192,6 +192,20 @@ Maintenance Asset Management System
 const API_URL =
 "https://script.google.com/macros/s/AKfycbxAtqMcIkxTt4ox6mhYKXtFcOYRkhUCjthvr8I_-Pi5yYoqQHKIlLkHSCV_SAkn_niQTA/exec";
 
+document.addEventListener("DOMContentLoaded", function(){
+  ["username", "password"].forEach(function(id){
+    const input = document.getElementById(id);
+    if(!input) return;
+
+    input.addEventListener("keydown", function(event){
+      if(event.key === "Enter"){
+        event.preventDefault();
+        login();
+      }
+    });
+  });
+});
+        
 async function login() {
   const status = document.getElementById("status");
   status.innerText = "Memproses login...";
