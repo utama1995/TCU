@@ -320,6 +320,10 @@ Maintenance Asset Management System
 <label>Vendor</label>
 <input id="edit_vendor">
 
+<label>Estimasi Selesai</label>
+<input id="edit_estimasi" placeholder="Contoh: 3 hari kerja">
+
+  
 <button class="save-btn" onclick="saveEdit()">Save</button>
 </div>
 </div>
@@ -433,7 +437,7 @@ function renderTable(data){
     <td>${row.vendor||"-"}</td>
     <td>${formatTanggalIndonesia(row.update)}</td>
     <td>
-    <button ${disabled} onclick="openEditModal('${row.id}','${status}')">
+   <button ${disabled} onclick="openEditModal('${encodeURIComponent(row.id||"")}','${encodeURIComponent(status)}','${encodeURIComponent(row.catatan||"")}','${encodeURIComponent(row.vendor||"")}','${encodeURIComponent(row.estimasi||"")}')">
     ${status==="Done"?"Close":"Edit"}
     </button>
     </td>
@@ -489,13 +493,19 @@ function showFoto(url){
   document.getElementById("fotoModal").style.display = "flex";
 }
   
-function openEditModal(ticket,status){
-  if(status==="Done"){
+function openEditModal(ticket,status,catatan,vendor,estimasi){
+  const ticketValue = decodeURIComponent(ticket || "");
+  const statusValue = decodeURIComponent(status || "Waiting");
+
+  if(statusValue==="Done"){
     alert("Ticket sudah selesai dan tidak dapat diedit kembali.");
     return;
   }
-  document.getElementById("edit_ticket").value=ticket;
-  document.getElementById("edit_status").value=status;
+  document.getElementById("edit_ticket").value=ticketValue;
+  document.getElementById("edit_status").value=statusValue;
+  document.getElementById("edit_catatan").value=decodeURIComponent(catatan || "");
+  document.getElementById("edit_vendor").value=decodeURIComponent(vendor || "");
+  document.getElementById("edit_estimasi").value=decodeURIComponent(estimasi || "");
   document.getElementById("editModal").style.display="flex";
 }
 
@@ -518,6 +528,8 @@ async function saveEdit(){
   formData.append("status",document.getElementById("edit_status").value);
   formData.append("catatan",document.getElementById("edit_catatan").value);
   formData.append("vendor",document.getElementById("edit_vendor").value);
+  formData.append("estimasi",document.getElementById("edit_estimasi").value);
+
 
   const res=await fetch(API_URL,{method:"POST",body:formData});
   const result=await res.json();
