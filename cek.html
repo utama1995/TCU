@@ -8,6 +8,165 @@
 
 <style>
 
+*{
+box-sizing:border-box;
+}
+  
+body{
+margin:0;
+font-family:Arial, Helvetica, sans-serif;
+background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:flex-start;
+padding:32px 15px;
+color:#15262d;
+}
+  
+.container{
+background:white;
+width:100%;
+max-width:480px;
+border-radius:10px;
+box-shadow:0 18px 42px rgba(0,0,0,0.32);
+overflow:hidden;
+}
+
+.page-title{
+margin:0;
+padding:22px 24px 18px;
+background:#2c5364;
+color:white;
+font-size:21px;
+text-align:center;
+letter-spacing:0;
+}
+
+.form-panel{
+padding:24px;
+}
+
+.input-label{
+display:block;
+font-size:13px;
+font-weight:700;
+color:#38525c;
+margin-bottom:6px;
+}
+
+input{
+width:100%;
+padding:14px;
+border-radius:8px;
+border:1px solid #c8d4d9;
+font-size:14px;
+background:#fbfcfc;
+color:#10242c;
+transition:0.2s;
+}
+
+input:focus{
+border-color:#2c5364;
+outline:none;
+box-shadow:0 0 0 3px rgba(44,83,100,0.16);
+background:white;
+}
+
+button{
+width:100%;
+
+padding:14px;
+margin-top:12px;
+border-radius:8px;
+border:0;
+font-size:14px;
+font-weight:700;
+cursor:pointer;
+transition:0.2s;
+background:#2c5364;
+color:white;
+}
+
+button:hover{
+background:#203a43;
+transform:translateY(-1px);
+}
+
+.vendor-btn{
+background:#eef3f5;
+color:#244f60;
+border:1px solid #c8d4d9;
+}
+
+.vendor-btn:hover{
+background:#dfe9ed;
+}
+
+.back-btn{
+background:#6c757d;
+}
+
+.result{
+margin-top:20px;
+padding:18px;
+background:#f7fafb;
+border:1px solid #e3ebee;
+border-radius:10px;
+font-size:14px;
+word-wrap:break-word;
+line-height:1.35;
+}
+
+.label{
+font-weight:bold;
+margin-top:13px;
+color:#244f60;
+}
+
+.value{
+margin:3px 0 8px;
+color:#13272f;
+}
+
+.status-open,
+.status-progress,
+.status-done{
+display:inline-block;
+color:white;
+font-weight:bold;
+padding:5px 10px;
+border-radius:999px;
+}
+
+.status-open{
+background:#f39c12;
+}
+
+.status-progress{
+background:#3498db;
+}
+
+.status-done{
+background:#27ae60;
+}
+
+img{
+margin-top:10px;
+max-width:100%;
+max-height:430px;
+object-fit:contain;
+border-radius:8px;
+border:1px solid #dce5e8;
+background:white;
+}
+
+a{
+display:block;
+margin-top:14px;
+text-decoration:none;
+}
+
 .modal{
 display:none;
 position:fixed;
@@ -19,6 +178,7 @@ background:rgba(0,0,0,0.55);
 justify-content:center;
 align-items:center;
 z-index:1000;
+padding:18px;
 }
 
 .modal-content{
@@ -26,9 +186,26 @@ background:white;
 width:90%;
 max-width:450px;
 padding:25px;
-border-radius:14px;
+border-radius:10px;
 box-shadow:0 20px 40px rgba(0,0,0,0.35);
 animation:fadeIn 0.2s ease-in-out;
+}
+
+.modal-content h3{
+margin:0 0 14px;
+text-align:center;
+color:#244f60;
+font-size:20px;
+}
+
+.modal-content p{
+color:#35464d;
+}
+
+.vendor-steps{
+margin-top:15px;
+line-height:1.6;
+font-size:14px;
 }
 
 @keyframes fadeIn{
@@ -36,129 +213,25 @@ from{opacity:0; transform:scale(0.95);}
 to{opacity:1; transform:scale(1);}
 }
   
-body{
-margin:0;
-font-family: Arial, Helvetica, sans-serif;
-background: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
-min-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
-padding:15px;
-box-sizing:border-box;
-}
-  
-.container{
-background:white;
-width:100%;
-max-width:480px;
-padding:25px;
-border-radius:12px;
-box-shadow:0 10px 25px rgba(0,0,0,0.3);
-box-sizing:border-box;
-}
-
-h2{
-text-align:center;
-margin-top:0;
-color:#333;
-font-size:20px;
-}
-
-input{
-width:100%;
-max-width:100%;
-padding:14px;
-margin-top:12px;
-border-radius:6px;
-border:1px solid #ccc;
-font-size:14px;
-box-sizing:border-box;
-}
-
-input:focus{
-border-color:#2c5364;
-outline:none;
-box-shadow:0 0 5px rgba(44,83,100,0.5);
-}
-
-button{
-width:100%;
-max-width:100%;
-padding:14px;
-margin-top:12px;
-border-radius:6px;
-border:1px solid #2c5364;
-font-size:14px;
-box-sizing:border-box;
-}
-
-button:hover{
-background:#203a43;
-}
-
-.result{
-margin-top:20px;
-padding:15px;
-background:#f9f9f9;
-border-radius:8px;
-font-size:14px;
-word-wrap:break-word;
-}
-
-.container{
-box-sizing:border-box;
-}
-
-.label{
-font-weight:bold;
-margin-top:10px;
-}
-
-.value{
-margin-bottom:8px;
-}
-
-.status-open{
-color:#f39c12;
-font-weight:bold;
-}
-
-.status-progress{
-color:#3498db;
-font-weight:bold;
-}
-
-.status-done{
-color:#27ae60;
-font-weight:bold;
-}
-
-img{
-margin-top:10px;
-max-width:100%;
-border-radius:8px;
-}
-
-a{
-display:block;
-margin-top:15px;
-}
-
 @media (max-width:480px){
-
-.container{
-padding:20px;
-border-radius:10px;
+body{
+padding:20px 12px;
 }
-
-h2{
-font-size:18px;
-}
-}
-
-</style>
   
+.container{
+border-radius:9px;
+}
+
+.page-title{
+font-size:19px;
+padding:20px;
+}
+
+.form-panel{
+padding:20px;
+}
+}
+</style>
 </head>
 
 <body>
@@ -182,67 +255,50 @@ if(!token){
 </script>
 
 <div class="container">
+  <h2 class="page-title">CEK STATUS LAPORAN</h2>
 
-<h2>CEK STATUS LAPORAN</h2>
-
-<input type="text" id="ticket" placeholder="Masukkan Ticket ID">
+<div class="form-panel">
+    <label class="input-label" for="ticket">Ticket ID</label>
+    <input type="text" id="ticket" placeholder="Masukkan Ticket ID">
 
 <button onclick="cekStatus()">CEK STATUS</button>
 
-<button type="button" onclick="openVendorInfo()" 
-style="background:#d3d8db;margin-top:10px;">
-📌 Informasi Pencarian Vendor
-</button>
-
+<button type="button" class="vendor-btn" onclick="openVendorInfo()">
+      Informasi Pencarian Vendor
+    </button>
+  
 <div id="hasil" class="result"></div>
 
-<br>
-
 <a href="index.html">
-<button style="
-background:#6c757d;
-color:white;
-border:none;
-padding:10px 15px;
-cursor:pointer;
-border-radius:5px;
-">
-← Kembali ke Menu Utama
-</button>
-</a>
-
+      <button class="back-btn">Kembali ke Menu Utama</button>
+    </a>
+  </div>
 </div>
 
 <script src="config.js"></script>
 <script src="cek.js"></script>
-<!-- MODAL INFORMASI VENDOR -->
+
 <div id="vendorModal" class="modal" onclick="overlayCloseVendor(event)">
   <div class="modal-content">
-    <h3 style="text-align:center;color:#2c5364;">
-      Proses Pencarian Vendor
-    </h3>
-      <p>Waiting pencarian vendor (2 x 24) jam hari kerja</p>
-    <div style="margin-top:15px; line-height:1.6; font-size:14px;">
+    <h3>Proses Pencarian Vendor</h3>
+    <p>Waiting pencarian vendor (2 x 24) jam hari kerja</p>
+
+    <div class="vendor-steps">
       <p>
         1. Mengidentifikasi<br>
-        2. Menyimpulkan & memutuskan<br>
+        2. Menyimpulkan dan memutuskan<br>
         3. Meminta persetujuan<br>
         4. Proses pencarian vendor<br>
         5. Penentuan spek<br>
         6. Nego Vendor
       </p>
-<p style="margin-left:10px;">
-      No 1-6 proses penanganan : <strong> 7 hari kerja</strong>
-    </p>
-        <p>7. Penetapan Vendor : <strong> 3 hari kerja</strong></p>
-        <p>8. Proses pengerjaan</p>
-        <p>9. Selesai</p>
-        <p>10. BAST : <strong>3 hari kerja</strong></p>
-        <p>11. Pembayaran : <strong>10 hari kerja</strong></p>
-
-      <p>
-        Silakan tunggu update selanjutnya pada status laporan Anda.
-      </p>
+<p>No 1-6 proses penanganan: <strong>7 hari kerja</strong></p>
+      <p>7. Penetapan Vendor: <strong>3 hari kerja</strong></p>
+      <p>8. Proses pengerjaan</p>
+      <p>9. Selesai</p>
+      <p>10. BAST: <strong>3 hari kerja</strong></p>
+      <p>11. Pembayaran: <strong>10 hari kerja</strong></p>
+      <p>Silakan tunggu update selanjutnya pada status laporan Anda.</p>
     </div>
   </div>
 </div>
