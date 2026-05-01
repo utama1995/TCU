@@ -138,7 +138,7 @@ ${statusText}
 <div class="value">
 ${
 safeText(data.foto) !== "-"
-? `<img src="${safeText(data.foto)}" alt="Foto Laporan">`
+? `<button type="button" class="inline-action" onclick="openFotoStatus('${encodeURIComponent(safeText(data.foto))}')">Lihat Foto</button>`
 : "-"
 }
 </div>
