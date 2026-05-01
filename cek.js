@@ -133,7 +133,7 @@ return;
 const tickets = Array.isArray(data.tickets) ? data.tickets : [];
 
 if(tickets.length === 0){
-hasil.innerHTML = "<div class='empty-state'>Belum ada laporan yang dibuat oleh akun ini.</div>";
+hasil.innerHTML = `<div class='empty-state'>Belum ada laporan yang dibuat oleh akun ini.<br>Akun aktif: ${safeText(data.username)}</div>`;
 return;
 }
 
