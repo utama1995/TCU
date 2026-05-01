@@ -134,6 +134,19 @@ position:relative;
 animation:fadeIn 0.2s ease-in-out;
 }
 
+.foto-modal-content{
+max-width:380px;
+padding:20px;
+}
+
+#fotoContent{
+width:100%;
+max-height:70vh;
+object-fit:contain;
+border-radius:10px;
+margin-top:12px;
+}
+  
 @keyframes fadeIn{
 from{opacity:0; transform:scale(0.95);}
 to{opacity:1; transform:scale(1);}
@@ -299,7 +312,7 @@ Maintenance Asset Management System
 
 <!-- MODAL EDIT -->
 <div id="editModal" class="modal" onclick="overlayClose(event,'editModal')">
-<div class="modal-content">
+<div class="modal-content foto-modal-content">
 <span class="close-btn" onclick="closeModal('editModal')">&times;</span>
 <h3>Edit Ticket</h3>
 
@@ -345,7 +358,7 @@ Maintenance Asset Management System
 
     <div style="text-align:center;">
       <img id="fotoContent" 
-           style="max-width:100%; border-radius:10px; margin-top:15px;">
+           alt="Foto Laporan">
     </div>
 
   </div>
