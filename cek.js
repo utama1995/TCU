@@ -2,11 +2,9 @@
 // FORMAT TANGGAL INDONESIA
 // ================================
 function formatTanggalIndonesia(tanggalISO){
-
 if(!tanggalISO) return "-";
 
 try{
-
 const tanggal = new Date(tanggalISO);
 
 if(isNaN(tanggal)) return tanggalISO;
@@ -18,11 +16,8 @@ year: "numeric"
 });
 
 }catch{
-
 return tanggalISO;
-
 }
-
 }
 
 function safeText(value){
@@ -32,125 +27,126 @@ const text = String(value).trim();
 return text !== "" ? text : "-";
 }
 
-
-// ================================
-// GLOBAL LOCK (ANTI DOUBLE CLICK)
-// ================================
-let isChecking = false;
-
-
-// ================================
-// CEK STATUS (PRODUCTION VERSION)
-// ================================
-async function cekStatus(){
-
-if(isChecking) return;
-isChecking = true;
-
-const hasil = document.getElementById("hasil");
-const ticket = document.getElementById("ticket").value.trim();
-
-if(!ticket){
-
-alert("Masukkan Ticket ID");
-isChecking = false;
-return;
-
+function getStatusClass(status){
+if(status === "On Progress") return "status-progress";
+if(status === "Done") return "status-done";
+if(status === "Pending") return "status-pending";
+return "status-open";
 }
 
-hasil.innerHTML = "Mencari data...";
+function renderPhotoButton(url){
+const foto = safeText(url);
+
+if(foto === "-"){
+return "-";
+}
+
+return `<button type="button" class="inline-action" onclick="openFotoStatus('${encodeURIComponent(foto)}')">Lihat Foto</button>`;
+}
+
+function renderTicketCard(ticket){
+const statusText = safeText(ticket.status) === "-" ? "Waiting" : safeText(ticket.status);
+const statusClass = getStatusClass(statusText);
+
+return `
+<div class="ticket-card">
+  <div class="ticket-card-header">
+    <div>
+      <div class="ticket-label">Ticket ID</div>
+      <div class="ticket-id">${safeText(ticket.id)}</div>
+    </div>
+    <span class="${statusClass}">${statusText}</span>
+  </div>
+
+<div class="ticket-grid">
+    <div>
+      <div class="label">Tanggal Lapor</div>
+      <div class="value">${formatTanggalIndonesia(ticket.tanggal)}</div>
+    </div>
+    <div>
+      <div class="label">Update Terakhir</div>
+      <div class="value">${formatTanggalIndonesia(ticket.update)}</div>
+    </div>
+    <div>
+      <div class="label">Cabang</div>
+      <div class="value">${safeText(ticket.departemen)}</div>
+    </div>
+    <div>
+      <div class="label">Nama Aset</div>
+      <div class="value">${safeText(ticket.aset)}</div>
+    </div>
+    <div>
+      <div class="label">Kategori</div>
+      <div class="value">${safeText(ticket.kategori)}</div>
+    </div>
+    <div>
+      <div class="label">Estimasi Selesai</div>
+      <div class="value">${safeText(ticket.estimasi)}</div>
+    </div>
+  </div>
+
+<div class="label">Deskripsi Kerusakan</div>
+  <div class="value">${safeText(ticket.deskripsi)}</div>
+
+  <div class="label">Catatan GA</div>
+  <div class="value">${safeText(ticket.catatan)}</div>
+
+  <div class="ticket-footer">
+    <div>
+      <div class="label">Vendor</div>
+      <div class="value">${safeText(ticket.vendor)}</div>
+    </div>
+    <div>
+      <div class="label">Foto Pelaporan</div>
+      <div class="value">${renderPhotoButton(ticket.foto)}</div>
+    </div>
+  </div>
+</div>
+`;
+}
+
+async function loadMyTickets(){
+const hasil = document.getElementById("hasil");
+
+hasil.innerHTML = "<div class='loading-box'>Memuat laporan Anda...</div>";
 
 try{
-
 const response = await fetch(
 API_URL +
-"?action=get&ticket_id=" + encodeURIComponent(ticket) +
+"?action=myTickets" +
 "&token=" + encodeURIComponent(localStorage.getItem("token"))
 );
 
 const data = await response.json();
-  if(data.session_expired){
-  alert("Session berakhir. Silakan login ulang.");
-  localStorage.clear();
-  window.location.href = "login.html";
-  return;
-}
-console.log("DATA DARI BACKEND:", data);
-if(!data || data.success === false){
-
-hasil.innerHTML = "<span style='color:red;'>Ticket tidak ditemukan</span>";
-isChecking = false;
+if(data.session_expired){
+alert("Session berakhir. Silakan login ulang.");
+localStorage.clear();
+window.location.href = "login.html";
 return;
-
 }
 
-
-// ================================
-// STATUS CLASS
-// ================================
-let statusText = data.status || "Waiting";
-let statusClass = "status-open";
-
-if(statusText === "On Progress")
-statusClass = "status-progress";
-
-if(statusText === "Done")
-statusClass = "status-done";
-
-// ================================
-// RENDER DATA
-// ================================
-hasil.innerHTML = `
-<div class="label">Ticket ID:</div>
-<div class="value">${ticket}</div>
-
-<div class="label">Tanggal Lapor:</div>
-<div class="value">${formatTanggalIndonesia(data.tanggal)}</div>
-
-<div class="label">Nama Pelapor:</div>
-<div class="value">${safeText(data.nama)}</div>
-
-<div class="label">Cabang:</div>
-<div class="value">${safeText(data.departemen)}</div>
-
-<div class="label">Nama Aset:</div>
-<div class="value">${safeText(data.aset)}</div>
-
-
-<div class="label">Status:</div>
-<div class="value ${statusClass}">
-${statusText}
-</div>
-
-<div class="label">Catatan GA:</div>
-<div class="value">${safeText(data.catatan)}</div>
-
-<div class="label">Vendor:</div>
-<div class="value">${safeText(data.vendor)}</div>
-
-<div class="label">Estimasi Selesai:</div>
-<div class="value">${safeText(data.estimasi)}</div>
-
-<div class="label">Update Terakhir:</div>
-<div class="value">${formatTanggalIndonesia(data.update)}</div>
-
-<div class="label">Foto Pelaporan:</div>
-<div class="value">
-${
-safeText(data.foto) !== "-"
-? `<button type="button" class="inline-action" onclick="openFotoStatus('${encodeURIComponent(safeText(data.foto))}')">Lihat Foto</button>`
-: "-"
+if(!data || data.success === false){
+hasil.innerHTML = "<div class='empty-state'>Laporan tidak bisa dimuat.</div>";
+return;
 }
-</div>
-`;
+
+const tickets = Array.isArray(data.tickets) ? data.tickets : [];
+
+if(tickets.length === 0){
+hasil.innerHTML = "<div class='empty-state'>Belum ada laporan yang dibuat oleh akun ini.</div>";
+return;
+}
+
+tickets.sort(function(a,b){
+return new Date(b.tanggal).getTime() - new Date(a.tanggal).getTime();
+});
+
+hasil.innerHTML = tickets.map(renderTicketCard).join("");
 
 }catch(err){
-
-hasil.innerHTML = "<span style='color:red;'>Data ticket tidak bisa ditampilkan. Silakan hubungi admin.</span>";
+hasil.innerHTML = "<div class='empty-state'>Data laporan tidak bisa ditampilkan. Silakan hubungi admin.</div>";
 console.error(err);
-
+}
 }
 
-isChecking = false;
-
-}
+document.addEventListener("DOMContentLoaded", loadMyTickets);
