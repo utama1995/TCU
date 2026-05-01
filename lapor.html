@@ -104,6 +104,47 @@ outline:none;
 box-shadow:0 0 5px rgba(44,83,100,0.5);
 }
 
+.dropdown-wrapper{
+position:relative;
+}
+
+.dropdown-input{
+background:white;
+cursor:pointer;
+}
+
+.dropdown-list{
+display:none;
+position:absolute;
+left:0;
+right:0;
+top:100%;
+z-index:20;
+background:white;
+border:1px solid #ccc;
+border-radius:6px;
+box-shadow:0 8px 18px rgba(0,0,0,0.18);
+margin-top:4px;
+max-height:252px;
+overflow-y:auto;
+}
+
+.dropdown-list.open{
+display:block;
+}
+
+.dropdown-option{
+padding:12px;
+font-size:14px;
+cursor:pointer;
+border-bottom:1px solid #eee;
+}
+
+.dropdown-option:hover,
+.dropdown-option.active{
+background:#eef4f6;
+}
+
 textarea{
 resize:vertical;
 min-height:80px;
@@ -186,7 +227,10 @@ if(!token){
 <label style="margin-top:10px; display:block;">Nama Pelapor</label>
     <input type="text" id="nama" placeholder="Memuat nama..." readonly style="background-color: #f0f0f0; cursor: not-allowed;">
     <label style="margin-top:10px; display:block;">Cabang</label>
-    <input type="text" id="cabang" placeholder="Cabang Kerja">
+    <div class="dropdown-wrapper">
+      <input type="text" id="cabang" class="dropdown-input" placeholder="Pilih Cabang" autocomplete="off" readonly onclick="toggleCabangDropdown()">
+      <div id="cabangDropdown" class="dropdown-list"></div>
+    </div>
 <label style="margin-top:10px; display:block;">Nama Aset</label>
 <input type="text" id="aset" placeholder="Nama benda yang dilaporkan">
 
@@ -253,6 +297,59 @@ border-radius:5px;
 </div>
 
 <script src="config.js"></script>
+<script>
+const cabangOptions = [
+  "Manajemen",
+  "Mataram",
+  "Setiabudi",
+  "Siliwangi",
+  "Majapahit",
+  "Mijen",
+  "Pekalongan",
+  "Kab. Pekalongan",
+  "Tanahmas",
+  "Ungaran",
+  "Salatiga",
+  "Mranggen",
+  "BSB",
+  "Weleri",
+  "Kedungmundu",
+  "Batang",
+  "Ngaliyan",
+  "Kajen",
+  "Woltermonginsidi"
+];
+
+function renderCabangDropdown(){
+  const dropdown = document.getElementById("cabangDropdown");
+  if(!dropdown) return;
+
+  dropdown.innerHTML = cabangOptions.map(function(cabang){
+    return `<div class="dropdown-option" onclick="selectCabang('${cabang}')">${cabang}</div>`;
+  }).join("");
+}
+
+function toggleCabangDropdown(){
+  const dropdown = document.getElementById("cabangDropdown");
+  if(dropdown) dropdown.classList.toggle("open");
+}
+
+function selectCabang(cabang){
+  document.getElementById("cabang").value = cabang;
+  document.getElementById("cabangDropdown").classList.remove("open");
+}
+
+document.addEventListener("DOMContentLoaded", renderCabangDropdown);
+
+document.addEventListener("click", function(event){
+  const wrapper = document.querySelector(".dropdown-wrapper");
+  const dropdown = document.getElementById("cabangDropdown");
+
+  if(wrapper && dropdown && !wrapper.contains(event.target)){
+    dropdown.classList.remove("open");
+  }
+});
+</script>
 <script src="lapor.js"></script>
 
 </body>
