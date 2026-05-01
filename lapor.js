@@ -123,6 +123,7 @@ hasil.innerHTML = "Mengirim laporan...";
 
 const formData = new FormData();
 formData.append("action","createTicket");
+  formData.append("token", localStorage.getItem("token") || "");
 formData.append("nama", cleanInput(nama));
 formData.append("cabang", cleanInput(cabang));
 formData.append("aset", cleanInput(aset));
@@ -138,6 +139,12 @@ body:formData
 
 const data = await response.json();
 
+if(data.session_expired){
+alert("Session berakhir. Silakan login ulang.");
+localStorage.clear();
+window.location.href = "login.html";
+return;
+}
 
 // =============================
 // HANDLE RESPONSE
