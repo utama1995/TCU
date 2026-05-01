@@ -236,14 +236,10 @@ if(!token){
 
 <label style="margin-top:10px; display:block;">Kategori Barang</label>
 
-<select id="kategori">
-<option value="">Pilih Kategori Aset</option>
-<option value="Elektronik">Elektronik</option>
-<option value="Mesin">Mesin</option>
-<option value="Furniture">Furniture</option>
-<option value="Kendaraan">Kendaraan</option>
-<option value="Bangunan">Bangunan</option>
-</select>
+<div class="dropdown-wrapper">
+  <input type="text" id="kategori" class="dropdown-input" placeholder="Pilih Kategori Aset" autocomplete="off" readonly onclick="toggleCustomDropdown('kategoriDropdown')">
+  <div id="kategoriDropdown" class="dropdown-list"></div>
+</div>
 
 <label style="margin-top:10px; display:block;">Deskripsi Kerusakan</label>
 <textarea id="deskripsi" placeholder="Jelaskan tentang kerusakan yang ingin dilaporkan"></textarea>
@@ -320,6 +316,14 @@ const cabangOptions = [
   "Woltermonginsidi"
 ];
 
+  const kategoriOptions = [
+  "Elektronik",
+  "Mesin",
+  "Furniture",
+  "Kendaraan",
+  "Bangunan"
+];
+
 function renderCabangDropdown(){
   const dropdown = document.getElementById("cabangDropdown");
   if(!dropdown) return;
@@ -329,24 +333,49 @@ function renderCabangDropdown(){
   }).join("");
 }
 
+function renderKategoriDropdown(){
+  const dropdown = document.getElementById("kategoriDropdown");
+  if(!dropdown) return;
+
+  dropdown.innerHTML = kategoriOptions.map(function(kategori){
+    return `<div class="dropdown-option" onclick="selectCustomOption('kategori', 'kategoriDropdown', '${kategori}')">${kategori}</div>`;
+  }).join("");
+}
+  
 function toggleCabangDropdown(){
-  const dropdown = document.getElementById("cabangDropdown");
+  toggleCustomDropdown("cabangDropdown");
+}
+
+function toggleCustomDropdown(dropdownId){
+  document.querySelectorAll(".dropdown-list").forEach(function(list){
+    if(list.id !== dropdownId){
+      list.classList.remove("open");
+    }
+  });
+
+  const dropdown = document.getElementById(dropdownId);
   if(dropdown) dropdown.classList.toggle("open");
 }
 
 function selectCabang(cabang){
-  document.getElementById("cabang").value = cabang;
-  document.getElementById("cabangDropdown").classList.remove("open");
+  selectCustomOption("cabang", "cabangDropdown", cabang);
 }
 
-document.addEventListener("DOMContentLoaded", renderCabangDropdown);
+function selectCustomOption(inputId, dropdownId, value){
+  document.getElementById(inputId).value = value;
+  document.getElementById(dropdownId).classList.remove("open");
+}
+
+document.addEventListener("DOMContentLoaded", function(){
+  renderCabangDropdown();
+  renderKategoriDropdown();
+});
 
 document.addEventListener("click", function(event){
-  const wrapper = document.querySelector(".dropdown-wrapper");
-  const dropdown = document.getElementById("cabangDropdown");
-
-  if(wrapper && dropdown && !wrapper.contains(event.target)){
-    dropdown.classList.remove("open");
+  if(!event.target.closest(".dropdown-wrapper")){
+    document.querySelectorAll(".dropdown-list").forEach(function(dropdown){
+      dropdown.classList.remove("open");
+    });
   }
 });
 </script>
