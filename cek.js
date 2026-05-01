@@ -131,6 +131,9 @@ ${statusText}
 <div class="label">Estimasi Selesai:</div>
 <div class="value">${safeText(data.estimasi)}</div>
 
+<div class="label">Update Terakhir:</div>
+<div class="value">${formatTanggalIndonesia(data.update)}</div>
+
 <div class="label">Foto Pelaporan:</div>
 <div class="value">
 ${
