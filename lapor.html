@@ -113,6 +113,27 @@ background:white;
 cursor:pointer;
 }
 
+.copy-ticket-btn{
+width:auto;
+min-width:150px;
+padding:10px 16px;
+margin-top:8px;
+background:#2c5364;
+border-radius:6px;
+font-size:14px;
+}
+
+.copy-ticket-btn:hover{
+background:#203a43;
+}
+
+#copyStatus{
+min-height:18px;
+margin-top:8px;
+font-size:13px;
+color:#27ae60;
+}
+
 .dropdown-list{
 display:none;
 position:absolute;
@@ -282,6 +303,9 @@ border-radius:5px;
 
     <h2 id="modalTicketID" style="color:#ff2b05;"></h2>
 
+    <button type="button" class="copy-ticket-btn" onclick="copyTicketID()">Copy Ticket</button>
+    <div id="copyStatus"></div>
+
     <p style="margin-top:15px; font-size:14px; line-height:1.6;">
       <strong>PENTING:</strong><br>
       Silakan simpan atau screenshot Ticket ID ini.<br>
@@ -366,6 +390,26 @@ function selectCustomOption(inputId, dropdownId, value){
   document.getElementById(dropdownId).classList.remove("open");
 }
 
+async function copyTicketID(){
+  const ticket = document.getElementById("modalTicketID").innerText.trim();
+  const status = document.getElementById("copyStatus");
+
+  if(!ticket) return;
+
+  try{
+    await navigator.clipboard.writeText(ticket);
+    status.innerText = "Ticket berhasil disalin";
+  }catch(error){
+    const tempInput = document.createElement("input");
+    tempInput.value = ticket;
+    document.body.appendChild(tempInput);
+    tempInput.select();
+    document.execCommand("copy");
+    document.body.removeChild(tempInput);
+    status.innerText = "Ticket berhasil disalin";
+  }
+}
+  
 document.addEventListener("DOMContentLoaded", function(){
   renderCabangDropdown();
   renderKategoriDropdown();
