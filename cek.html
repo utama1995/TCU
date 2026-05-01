@@ -161,6 +161,38 @@ border:1px solid #dce5e8;
 background:white;
 }
 
+.inline-action{
+width:auto;
+min-width:110px;
+padding:9px 14px;
+margin-top:4px;
+font-size:13px;
+}
+
+.photo-modal-content{
+max-width:420px;
+}
+
+#fotoStatusContent{
+display:block;
+width:100%;
+max-height:72vh;
+object-fit:contain;
+border-radius:8px;
+border:1px solid #dce5e8;
+background:white;
+}
+
+.close-btn{
+position:absolute;
+top:10px;
+right:14px;
+font-size:22px;
+font-weight:bold;
+color:#e74c3c;
+cursor:pointer;
+}
+  
 a{
 display:block;
 margin-top:14px;
@@ -189,6 +221,7 @@ padding:25px;
 border-radius:10px;
 box-shadow:0 20px 40px rgba(0,0,0,0.35);
 animation:fadeIn 0.2s ease-in-out;
+position:relative;
 }
 
 .modal-content h3{
@@ -242,12 +275,28 @@ function openVendorInfo(){
   document.getElementById("vendorModal").style.display = "flex";
 }
 
+function openFotoStatus(url){
+  const img = document.getElementById("fotoStatusContent");
+  img.src = decodeURIComponent(url);
+  document.getElementById("fotoStatusModal").style.display = "flex";
+}
+
+function closeModal(id){
+  document.getElementById(id).style.display = "none";
+}
+
 function overlayCloseVendor(event){
   if(event.target.id === "vendorModal"){
     document.getElementById("vendorModal").style.display = "none";
   }
 }
 
+function overlayCloseModal(event, id){
+  if(event.target.id === id){
+    closeModal(id);
+  }
+}
+  
 if(!token){
   alert("Silakan login terlebih dahulu");
   window.location.href="login.html";
@@ -280,6 +329,7 @@ if(!token){
 
 <div id="vendorModal" class="modal" onclick="overlayCloseVendor(event)">
   <div class="modal-content">
+    <span class="close-btn" onclick="closeModal('vendorModal')">&times;</span>
     <h3>Proses Pencarian Vendor</h3>
     <p>Waiting pencarian vendor (2 x 24) jam hari kerja</p>
 
@@ -302,5 +352,14 @@ if(!token){
     </div>
   </div>
 </div>
+
+<div id="fotoStatusModal" class="modal" onclick="overlayCloseModal(event,'fotoStatusModal')">
+  <div class="modal-content photo-modal-content">
+    <span class="close-btn" onclick="closeModal('fotoStatusModal')">&times;</span>
+    <h3>Foto Pelaporan</h3>
+    <img id="fotoStatusContent" alt="Foto Pelaporan">
+  </div>
+</div>
+
 </body>
 </html>
