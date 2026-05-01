@@ -25,6 +25,14 @@ return tanggalISO;
 
 }
 
+function safeText(value){
+if(value === null || value === undefined) return "-";
+
+const text = String(value).trim();
+return text !== "" ? text : "-";
+}
+
+
 // ================================
 // GLOBAL LOCK (ANTI DOUBLE CLICK)
 // ================================
@@ -100,13 +108,13 @@ hasil.innerHTML = `
 <div class="value">${formatTanggalIndonesia(data.tanggal)}</div>
 
 <div class="label">Nama Pelapor:</div>
-<div class="value">${data.nama || "-"}</div>
+<div class="value">${safeText(data.nama)}</div>
 
 <div class="label">Cabang:</div>
-<div class="value">${data.departemen || "-"}</div>
+<div class="value">${safeText(data.departemen)}</div>
 
 <div class="label">Nama Aset:</div>
-<div class="value">${data.aset || "-"}</div>
+<div class="value">${safeText(data.aset)}</div>
 
 
 <div class="label">Status:</div>
@@ -115,25 +123,19 @@ ${statusText}
 </div>
 
 <div class="label">Catatan GA:</div>
-<div class="value">${data.catatan || "-"}</div>
+<div class="value">${safeText(data.catatan)}</div>
 
 <div class="label">Vendor:</div>
-<div class="value">
-${
-data.vendor && data.vendor.trim() !== ""
-? data.vendor
-: "-"
-}
-</div>
+<div class="value">${safeText(data.vendor)}</div>
 
 <div class="label">Estimasi Selesai:</div>
-<div class="value">${data.estimasi || "-"}</div>
+<div class="value">${safeText(data.estimasi)}</div>
 
 <div class="label">Foto Pelaporan:</div>
 <div class="value">
 ${
-data.foto
-? `<img src="${data.foto}" alt="Foto Laporan">`
+safeText(data.foto) !== "-"
+? `<img src="${safeText(data.foto)}" alt="Foto Laporan">`
 : "-"
 }
 </div>
@@ -141,7 +143,7 @@ data.foto
 
 }catch(err){
 
-hasil.innerHTML = "<span style='color:red;'>Error koneksi server</span>";
+hasil.innerHTML = "<span style='color:red;'>Data ticket tidak bisa ditampilkan. Silakan hubungi admin.</span>";
 console.error(err);
 
 }
