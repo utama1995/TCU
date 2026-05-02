@@ -218,7 +218,6 @@ color:#777;
 <script>
 const token = localStorage.getItem("token");
 const role = localStorage.getItem("role");
-const username = localStorage.getItem("username");
 
 if(!token){
   window.location.href="login.html";
@@ -315,22 +314,7 @@ Maintenance Asset Management System
 <div id="editModal" class="modal" onclick="overlayClose(event,'editModal')">
 <div class="modal-content foto-modal-content">
 <span class="close-btn" onclick="closeModal('editModal')">&times;</span>
-<div style="display:flex;justify-content:space-between;align-items:center;">
-
-  <!-- Tombol DELETE -->
-  <button id="deleteBtn"
-    style="background:#e74c3c;color:white;padding:6px 10px;border:none;border-radius:6px;display:none;"
-    onclick="deleteTicket()">
-    Delete
-  </button>
-
-  <!-- Judul -->
-  <h3 style="margin:0 auto;">Edit Ticket</h3>
-
-  <!-- Spacer biar tengah -->
-  <div style="width:60px;"></div>
-
-</div>
+<h3>Edit Ticket</h3>
 
 <label>Ticket ID</label>
 <input id="edit_ticket" readonly>
@@ -534,15 +518,6 @@ function openEditModal(ticket,status,catatan,vendor,estimasi){
   document.getElementById("edit_vendor").value=decodeURIComponent(vendor || "");
   document.getElementById("edit_estimasi").value=decodeURIComponent(estimasi || "");
   document.getElementById("editModal").style.display="flex";
-
-  const deleteBtn = document.getElementById("deleteBtn");
-
-// 🔥 HANYA USERNAME TERTENTU
-if(username === "admin"){
-  deleteBtn.style.display = "inline-block";
-}else{
-  deleteBtn.style.display = "none";
-}
 }
 
 function closeModal(id){
@@ -583,43 +558,6 @@ async function saveEdit(){
     alert("Session habis. Silakan login ulang.");
     localStorage.clear();
     window.location.href="login.html";
-  }
-}
-
-async function deleteTicket(){
-
-  const ticketId = document.getElementById("edit_ticket").value;
-
-  // konfirmasi dulu
-  if(!confirm("Yakin ingin menghapus ticket ini?")){
-    return;
-  }
-
-  const formData = new FormData();
-  formData.append("action","deleteTicket");
-  formData.append("token", localStorage.getItem("token"));
-  formData.append("ticket_id", ticketId);
-
-  try{
-
-    const res = await fetch(API_URL,{
-      method:"POST",
-      body:formData
-    });
-
-    const result = await res.json();
-
-    if(result.success){
-      alert("Ticket berhasil dihapus");
-      closeModal("editModal");
-      loadData();
-    }else{
-      alert("Gagal menghapus");
-    }
-
-  }catch(err){
-    alert("Error koneksi");
-    console.error(err);
   }
 }
 
