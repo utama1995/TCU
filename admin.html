@@ -374,7 +374,17 @@ function goBack(){
 }
 
 function logout(){
+  // Simpan savedUsername sebelum clear
+  const savedUsername = localStorage.getItem("savedUsername");
+  
+  // Clear semua localStorage
   localStorage.clear();
+  
+  // Restore savedUsername jika ada
+  if (savedUsername) {
+    localStorage.setItem("savedUsername", savedUsername);
+  }
+  
   window.location.href="login.html";
 }
 
@@ -448,7 +458,7 @@ function renderTable(data){
     <td>${row.vendor||"-"}</td>
     <td>${formatTanggalIndonesia(row.update)}</td>
     <td>
-   <button ${disabled} onclick="openEditModal('${encodeURIComponent(row.id||"")}','${encodeURIComponent(status)}','${encodeURIComponent(row.catatan||"")}','${encodeURIComponent(row.vendor||"")}','${encodeURIComponent(row.estimasi||"")}')">
+   <button ${disabled} onclick="openEditModal('${encodeURIComponent(row.id||"")}','${encodeURIComponent(status)}','${encodeURIComponent(row.catatan||"")}','${encodeURIComponent(row.vendor||"")}',[...]
     ${status==="Done"?"Close":"Edit"}
     </button>
     </td>
