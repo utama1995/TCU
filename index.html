@@ -132,7 +132,17 @@
 
     function logout() {
         if (confirm("Apakah Anda yakin ingin keluar?")) {
+            // Simpan savedUsername sebelum clear
+            const savedUsername = localStorage.getItem("savedUsername");
+            
+            // Clear semua localStorage
             localStorage.clear();
+            
+            // Restore savedUsername jika ada
+            if (savedUsername) {
+                localStorage.setItem("savedUsername", savedUsername);
+            }
+            
             window.location.href = "login.html";
         }
     }
