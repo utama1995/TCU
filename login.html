@@ -80,6 +80,29 @@ box-shadow:0 0 6px rgba(44,83,100,0.4);
 }
 
 /* =============================== */
+/* CHECKBOX REMEMBER */
+/* =============================== */
+.remember-section{
+margin-top:12px;
+display:flex;
+align-items:center;
+gap:8px;
+}
+
+.remember-section input[type="checkbox"]{
+width:16px;
+height:16px;
+cursor:pointer;
+}
+
+.remember-section label{
+font-size:13px;
+color:#555;
+cursor:pointer;
+margin:0;
+}
+
+/* =============================== */
 /* BUTTON */
 /* =============================== */
 .form-area button{
@@ -175,6 +198,11 @@ font-size:18px;
 
 </div>
 
+<div class="remember-section">
+<input type="checkbox" id="rememberUsername">
+<label for="rememberUsername">Simpan username</label>
+</div>
+
 <button onclick="login()">Login</button>
 
 <p id="status"></p>
@@ -191,6 +219,9 @@ Maintenance Asset Management System
 <script>
 
 document.addEventListener("DOMContentLoaded", function(){
+  // Load username yang tersimpan saat halaman dimuat
+  loadSavedUsername();
+  
   ["username", "password"].forEach(function(id){
     const input = document.getElementById(id);
     if(!input) return;
@@ -203,6 +234,34 @@ document.addEventListener("DOMContentLoaded", function(){
     });
   });
 });
+
+// Fungsi untuk load username dari localStorage
+function loadSavedUsername(){
+  const savedUsername = localStorage.getItem("savedUsername");
+  const rememberCheckbox = document.getElementById("rememberUsername");
+  
+  if(savedUsername){
+    document.getElementById("username").value = savedUsername;
+    rememberCheckbox.checked = true;
+  }
+}
+
+// Fungsi untuk simpan username
+function saveUsername(username){
+  const rememberCheckbox = document.getElementById("rememberUsername");
+  
+  if(rememberCheckbox.checked){
+    localStorage.setItem("savedUsername", username);
+  } else {
+    localStorage.removeItem("savedUsername");
+  }
+}
+
+// Fungsi untuk hapus username yang tersimpan
+function clearSavedUsername(){
+  localStorage.removeItem("savedUsername");
+  document.getElementById("rememberUsername").checked = false;
+}
         
 async function login() {
   const status = document.getElementById("status");
@@ -225,8 +284,11 @@ async function login() {
     localStorage.setItem("token", data.token);
     localStorage.setItem("role", data.role);
     localStorage.setItem("username", data.username);
+    
+    // Simpan atau hapus username berdasarkan checkbox
+    saveUsername(username);
 
-    // HANYA lempar ke reset jika backend bilang ini benar-benar login PERTAMA
+    // HANYA lempar ke reset sika backend bilang ini benar-benar login PERTAMA
     if (data.first_login === true) {
         document.getElementById("status").innerText = "Pengguna baru, silakan ganti password...";
         setTimeout(() => {
@@ -268,6 +330,9 @@ async function handleLogin() {
       localStorage.setItem("token", data.token);
       localStorage.setItem("role", data.role);
       localStorage.setItem("username", data.username);
+      
+      // Simpan atau hapus username berdasarkan checkbox
+      saveUsername(username);
 
       // JIKA DATA LOGIN PERTAMA KALI (KOLOM LASTLOGIN KOSONG)
       if (data.first_login) {
