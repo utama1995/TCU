@@ -44,48 +44,43 @@ return "-";
 return `<button type="button" class="inline-action" onclick="openFotoStatus('${encodeURIComponent(foto)}')">Lihat Foto</button>`;
 }
 
-function renderTicketCard(ticket){
+// Render list item (header yang diklik untuk expand)
+function renderTicketListItem(ticket){
 const statusText = safeText(ticket.status) === "-" ? "Waiting" : safeText(ticket.status);
 const statusClass = getStatusClass(statusText);
+const ticketId = safeText(ticket.id);
 
-return `
-<div class="ticket-card">
-  <div class="ticket-card-header">
-    <div>
-      <div class="ticket-label">Ticket ID</div>
-      <div class="ticket-id">${safeText(ticket.id)}</div>
-    </div>
-    <span class="${statusClass}">${statusText}</span>
-  </div>
-
-<div class="ticket-grid">
-    <div>
+// Detail yang akan ditampilkan saat expand
+const detailHTML = `
+<div class="ticket-detail">
+  <div class="ticket-grid">
+    <div class="ticket-field">
       <div class="label">Tanggal Lapor</div>
       <div class="value">${formatTanggalIndonesia(ticket.tanggal)}</div>
     </div>
-    <div>
+    <div class="ticket-field">
       <div class="label">Update Terakhir</div>
       <div class="value">${formatTanggalIndonesia(ticket.update)}</div>
     </div>
-    <div>
+    <div class="ticket-field">
       <div class="label">Cabang</div>
       <div class="value">${safeText(ticket.departemen)}</div>
     </div>
-    <div>
+    <div class="ticket-field">
       <div class="label">Nama Aset</div>
       <div class="value">${safeText(ticket.aset)}</div>
     </div>
-    <div>
+    <div class="ticket-field">
       <div class="label">Kategori</div>
       <div class="value">${safeText(ticket.kategori)}</div>
     </div>
-    <div>
+    <div class="ticket-field">
       <div class="label">Estimasi Selesai</div>
       <div class="value">${safeText(ticket.estimasi)}</div>
     </div>
   </div>
 
-<div class="label">Deskripsi Kerusakan</div>
+  <div class="label">Deskripsi Kerusakan</div>
   <div class="value">${safeText(ticket.deskripsi)}</div>
 
   <div class="label">Catatan GA</div>
@@ -101,6 +96,26 @@ return `
       <div class="value">${renderPhotoButton(ticket.foto)}</div>
     </div>
   </div>
+</div>
+`;
+
+return `
+<div class="ticket-list-item" id="ticket-${ticketId}">
+  <div class="ticket-list-header" onclick="toggleTicketDetail('${ticketId}')">
+    <div class="ticket-list-info">
+      <div class="ticket-list-id">#${ticketId}</div>
+      <div class="ticket-list-meta">
+        <span>📦 ${safeText(ticket.aset)}</span>
+        <span>🏢 ${safeText(ticket.departemen)}</span>
+        <span>📅 ${formatTanggalIndonesia(ticket.tanggal)}</span>
+      </div>
+    </div>
+    <div style="display:flex; flex-direction:column; align-items:center; gap:8px;">
+      <span class="${statusClass}">${statusText}</span>
+      <div class="ticket-expand-icon">▼</div>
+    </div>
+  </div>
+  ${detailHTML}
 </div>
 `;
 }
@@ -141,7 +156,7 @@ tickets.sort(function(a,b){
 return new Date(b.tanggal).getTime() - new Date(a.tanggal).getTime();
 });
 
-hasil.innerHTML = tickets.map(renderTicketCard).join("");
+hasil.innerHTML = tickets.map(renderTicketListItem).join("");
 
 }catch(err){
 hasil.innerHTML = "<div class='empty-state'>Data laporan tidak bisa ditampilkan. Silakan hubungi admin.</div>";
