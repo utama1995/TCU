@@ -363,8 +363,10 @@ Maintenance Asset Management System
 
   </div>
 </div>
-<script src="config.js"></script>
+
 <script>
+
+const API_URL="https://script.google.com/macros/s/AKfycbxAtqMcIkxTt4ox6mhYKXtFcOYRkhUCjthvr8I_-Pi5yYoqQHKIlLkHSCV_SAkn_niQTA/exec";
 
 let allTickets = [];
 let visibleCount = 20; // default tampil 20
@@ -374,17 +376,7 @@ function goBack(){
 }
 
 function logout(){
-  // Simpan savedUsername sebelum clear
-  const savedUsername = localStorage.getItem("savedUsername");
-  
-  // Clear semua localStorage
   localStorage.clear();
-  
-  // Restore savedUsername jika ada
-  if (savedUsername) {
-    localStorage.setItem("savedUsername", savedUsername);
-  }
-  
   window.location.href="login.html";
 }
 
@@ -458,7 +450,7 @@ function renderTable(data){
     <td>${row.vendor||"-"}</td>
     <td>${formatTanggalIndonesia(row.update)}</td>
     <td>
-   <button ${disabled} onclick="openEditModal('${encodeURIComponent(row.id||"")}','${encodeURIComponent(status)}','${encodeURIComponent(row.catatan||"")}','${encodeURIComponent(row.vendor||"")}',[...]
+   <button ${disabled} onclick="openEditModal('${encodeURIComponent(row.id||"")}','${encodeURIComponent(status)}','${encodeURIComponent(row.catatan||"")}','${encodeURIComponent(row.vendor||"")}','${encodeURIComponent(row.estimasi||"")}')">
     ${status==="Done"?"Close":"Edit"}
     </button>
     </td>
